@@ -27,6 +27,9 @@ import cv2
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from overlay import build_strip, B_WHITE, B_YELLOW, B_RED, B_GREY  # noqa: E402
+
 # ---------------------------------------------------------------- palette
 C_PANEL = (34, 29, 24)
 C_CARD = (48, 41, 34)
@@ -341,7 +344,10 @@ def main():
     ap.add_argument("--dets-npz", default=None)
     ap.add_argument("--width", type=int, default=960, help="detection width")
     ap.add_argument("--render-width", type=int, default=1280, help="video width in the output")
-    ap.add_argument("--panel", type=int, default=340, help="dashboard width, 0 to disable")
+    ap.add_argument("--panel", type=int, default=340, help="side dashboard width, 0 to disable")
+    ap.add_argument("--layout", choices=("strip", "panel", "none"), default="strip",
+                    help="strip = instrument bar above the video (default)")
+    ap.add_argument("--strip-height", type=int, default=96)
     ap.add_argument("--imgsz", type=int, default=640)
     ap.add_argument("--conf", type=float, default=0.40)
     ap.add_argument("--band", type=float, default=0.025)
@@ -411,11 +417,13 @@ def main():
     bg = cv2.createBackgroundSubtractorMOG2(history=400, varThreshold=30, detectShadows=True)
     bg.setShadowThreshold(0.6)
 
-    PW = args.panel
+    PW = args.panel if args.layout == "panel" else 0
+    SH = args.strip_height if args.layout == "strip" else 0
     writer = None
     if args.out:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-        writer = cv2.VideoWriter(args.out, cv2.VideoWriter_fourcc(*"mp4v"), fps, (RW + PW, RH))
+        writer = cv2.VideoWriter(args.out, cv2.VideoWriter_fourcc(*"mp4v"), fps,
+                                 (RW + PW, RH + SH))
 
     n_in = n_out = n_intruder = 0
     max_board = 0
@@ -562,19 +570,19 @@ def main():
             vis = cv2.resize(frame, (RW, RH), interpolation=cv2.INTER_AREA)
             a = cv2.GaussianBlur(soft_mask, (0, 0), RW * 0.012)[:, :, None]
             vis = (vis * (0.60 + 0.40 * a)).astype(np.uint8)
-            cv2.polylines(vis, [roi_poly_r], True, (110, 95, 80), 1, cv2.LINE_AA)
 
             p0 = (0, int(entrance.y_at(0) * sc))
             p1 = (RW, int(entrance.y_at(W) * sc))
-            cv2.line(vis, p0, p1, C_LINE, 2, cv2.LINE_AA)
-            text(vis, "COLMENA", (RW - 120, min(p0[1], p1[1]) - 12), 0.5, C_LINE, 1)
-            text(vis, "TABLA DE VUELO", (RW - 176, max(p0[1], p1[1]) + 26), 0.5, C_LINE, 1)
+            cv2.line(vis, p0, p1, B_YELLOW, 2, cv2.LINE_AA)
+            chip(vis, "HIVE", (RW - 86, min(p0[1], p1[1]) - 10), (14, 14, 14), 0.46)
+            chip(vis, "LANDING BOARD", (RW - 160, max(p0[1], p1[1]) + 28), (14, 14, 14), 0.46)
 
             for tr in live:
                 x, y, w, h = [int(v * sc) for v in tr.box]
-                col = {"IN": C_IN, "OUT": C_OUT}.get(tr.counted, C_TRACK)
+                col = {"IN": B_YELLOW, "OUT": B_WHITE}.get(tr.counted, B_WHITE)
+                cv2.rectangle(vis, (x - 1, y - 1), (x + w + 1, y + h + 1), (0, 0, 0), 3)
                 cv2.rectangle(vis, (x, y), (x + w, y + h), col, 2, cv2.LINE_AA)
-                text(vis, str(tr.id), (x, y - 5), 0.4, col, 1)
+                text(vis, str(tr.id), (x + 1, y - 5), 0.42, col, 1)
                 pts = [(int(a * sc), int(b * sc)) for a, b in tr.trail]
                 for i in range(1, len(pts)):
                     if math.dist(pts[i - 1], pts[i]) < RW * 0.05:
@@ -584,8 +592,8 @@ def main():
 
             for (x, y, w, h) in alert_boxes:
                 x, y, w, h = int(x * sc), int(y * sc), int(w * sc), int(h * sc)
-                cv2.rectangle(vis, (x - 4, y - 4), (x + w + 4, y + h + 4), C_ALERT, 3, cv2.LINE_AA)
-                chip(vis, "INTRUSO", (x - 4, y - 12), C_ALERT, 0.5)
+                cv2.rectangle(vis, (x - 4, y - 4), (x + w + 4, y + h + 4), B_RED, 3, cv2.LINE_AA)
+                chip(vis, "INTRUDER", (x - 4, y - 12), B_RED, 0.5)
 
             flashes = [f for f in flashes if t - f[0] < 1.0]
             used = []
@@ -593,16 +601,28 @@ def main():
                 age = t - ft
                 cx, cy = int(fx * sc), int(fy * sc)
                 r = int(12 + 30 * age)
-                col = C_IN if kind == "IN" else C_OUT
+                col = B_YELLOW if kind == "IN" else B_WHITE
                 cv2.circle(vis, (cx, cy), r, col, 2, cv2.LINE_AA)
                 lx, ly = cx + r + 6, cy + 6
                 while any(abs(ly - uy) < 22 and abs(lx - ux) < 150 for ux, uy in used):
                     ly += 24
                 used.append((lx, ly))
-                chip(vis, ("ENTRA #" if kind == "IN" else "SALE #") + str(fid),
+                chip(vis, ("IN #" if kind == "IN" else "OUT #") + str(fid),
                      (lx, ly), col, 0.48)
 
-            if PW:
+            if SH:
+                ev = [(e["t_s"], e["kind"], f'#{e["track"]}' if e["track"] > 0 else "")
+                      for e in events if e["kind"] in ("IN", "OUT")][-2:][::-1]
+                strip = build_strip(RW, SH, dict(
+                    hive=(args.title or Path(args.video).stem).upper(),
+                    n_in=n_in, n_out=n_out, on_board=len(live), peak=max_board,
+                    spark=list(spark), events=ev,
+                    alert=(t - last_alert_t) < 3.0,
+                    clock=f"T+{int(t) // 60:02d}:{t % 60:04.1f}",
+                    footer=("YOLO11N  ON-DEVICE" if replay else
+                            f"YOLO11N  {t_infer / max(processed, 1) * 1000:.0f} MS/FRAME  ON-DEVICE")))
+                canvas = np.vstack([strip, vis])
+            elif PW:
                 panel = build_panel(PW, RH, dict(
                     n_in=n_in, n_out=n_out, on_board=len(live), max_board=max_board,
                     spark=list(spark), n_intruder=n_intruder,
