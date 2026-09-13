@@ -1,21 +1,21 @@
 # Clips
 
-Recortes cortos y recomprimidos. Los vídeos completos no están en el repo: los
-originales pesan 128-205 MB cada uno, por encima del límite de 100 MB por
-fichero de GitHub, y los anotados 60-74 MB.
+Short, re-encoded excerpts. The full videos are not in the repo: the originals
+are 128-205 MB each, above GitHub's 100 MB per-file limit, and the annotated
+ones are 60-74 MB.
 
-| Fichero | Qué es |
+| File | What it is |
 |---|---|
-| `entrada_cenital_muestra.mp4` | 15 s de `20230711b-fan.mp4`, la entrada cruda del pipeline |
-| `20230609b-def_conteo.mp4` | 20 s de la colmena tranquila, anotada |
-| `20230711a-fan_conteo.mp4` | 20 s de la colmena densa: 25 abejas de media en la tabla |
-| `20230711b-fan_conteo.mp4` | 20 s de la colmena con más entradas |
+| `entrada_cenital_muestra.mp4` | 15 s of `20230711b-fan.mp4`, the pipeline's raw input |
+| `20230609b-def_conteo.mp4` | 20 s of the quiet hive, annotated |
+| `20230711a-fan_conteo.mp4` | 20 s of the busy hive: 25 bees on the board on average |
+| `20230711b-fan_conteo.mp4` | 20 s of the hive with the most entries |
 
-Los anotados se regeneran a resolución completa desde las detecciones guardadas
-en `out/*_dets.npz`, sin volver a ejecutar el detector:
+The annotated ones are regenerated at full resolution from the detections saved
+in `out/*_dets.npz`, without running the detector again:
 
 ```bash
-VIDEOS_DIR=/ruta/a/los/videos ./rerender.sh
+VIDEOS_DIR=/path/to/videos ./rerender.sh
 ```
 
-Material derivado del dataset de Mendeley, CC BY 4.0. Ver [../CREDITS.md](../CREDITS.md).
+Material derived from the Mendeley dataset, CC BY 4.0. See [../CREDITS.md](../CREDITS.md).

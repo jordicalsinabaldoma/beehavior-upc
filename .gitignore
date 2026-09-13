@@ -1,17 +1,17 @@
-# Entorno Python
+# Python environment
 .venv/
 __pycache__/
 *.pyc
 
-# Dataset completo (7,8 GB). Se descarga de Mendeley:
+# The full dataset (7.8 GB). Download it from Mendeley:
 #   https://doi.org/10.17632/8gb9r2yhfc.6
-# En dataset-sample/ hay una muestra para ver el formato sin bajar nada.
+# dataset-sample/ holds a sample, so you can see the format without it.
 data/
 dataset.zip
 dataset-minimal/
 
-# Salidas generadas. De out/ sí se versionan las cifras y las detecciones
-# guardadas (ver las excepciones de abajo); los vídeos de 60 MB no.
+# Generated output. From out/ we DO version the figures and the saved
+# detections (see the exceptions below); the 60 MB videos we do not.
 out/*
 !out/*.csv
 !out/*.log
@@ -20,29 +20,27 @@ out/*
 !out/*_dets.npz
 runs/
 
-# Pesos base de Ultralytics, se descargan solos en el primer uso
+# Ultralytics base weights, downloaded on first use
 yolo11n.pt
 
-# Vídeo original de la cámara de la caja (27 MB). En el repo va un bucle
-# corto con el mismo nombre; este es el largo, para grabar demos en local.
+# The box camera's original footage (27 MB). The repo carries a short loop
+# under the same name; this is the long one, for recording demos locally.
 box/assets/media/piquera_full.mp4
 
-# Blender: la escena se reconstruye desde blender/*.py, el .blend es resultado
+# Blender: the scene is rebuilt from blender/*.py, the .blend is the output
 blender/*.blend
 blender/*.blend[0-9]
 blender/assets/
 blender/renders/
 
-# Película de demostración en pixel art: fuera del repo
+# The pixel-art demo film: out of the repository
 demo/
 
-# Exploraciones de diseño de panel
+# Panel design and visual identity experiments. Not part of the pipeline:
+# nothing imports them.
 out/mocks*/
-
-# Exploraciones de diseno de panel y de identidad visual, no forman parte del
-# pipeline: nadie las importa.
 src/mock_panels*.py
 src/logo_intro.py
 
-# Copia byte a byte de models/bee11n.pt
+# Byte-for-byte copy of models/bee11n.pt
 models/bee11n_e7.pt

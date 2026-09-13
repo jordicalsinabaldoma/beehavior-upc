@@ -120,7 +120,7 @@ MT['pino2'] = pbr_tex("TEX Pino Envejecido", "coated_pine", scale=1.1, ao_mix=0.
 MT['chapa'] = pbr_tex("TEX Chapa Galvanizada", "metal_plate", scale=2.2, ao_mix=0.0, bump=0.14,
                       rough_mul=0.80, metallic=1.0, base_rgb=(0.596, 0.621, 0.638))
 MT['tabla'] = pbr_tex("TEX Tabla Vuelo", "coated_pine", scale=1.9, ao_mix=0.30, bump=0.07,
-                      rough_mul=1.9, hsv=(0.505, 0.20, 3.6))   # clara y mate: DISENO.md dice
+                      rough_mul=1.9, hsv=(0.505, 0.20, 3.6))   # clara y mate: DESIGN.md dice
                                                                # que asi se detecta mucho mejor
 MT['suelo'] = pbr_tex("TEX Suelo Hierba", "sparse_grass", scale=0.42, ao_mix=0.55, bump=0.65,
                       hsv=(0.512, 0.90, 1.25))

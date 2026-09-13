@@ -1,107 +1,124 @@
-# Estación de monitorización Beehaviour — escena 3D
+# Beehaviour monitoring station — 3D scene
 
-Reconstrucción en Blender del montaje físico: colmena Langstroth con cámara cenital
-sobre la piquera, caja de control con SoC y microcontrolador, y una cadena de sensores
-(dos PIR y dos termómetros) conectados en serie.
+A Blender reconstruction of the physical build: a Langstroth hive with a
+top-down camera over the entrance, a control box holding the SoC and the
+microcontroller, and a chain of sensors (two PIRs and two thermometers) wired in
+series.
 
-## Qué hay montado en la máquina
+## Rebuilding the scene
 
-| Pieza | Dónde | Notas |
-|---|---|---|
-| Blender 5.2 LTS | flatpak `--user` | sin sudo; **sandbox: no ve `/tmp`**, usa rutas bajo `$HOME` |
-| `uv` / `uvx` | `~/.local/bin` | |
-| MCP `blender-mcp` | scope usuario en Claude Code | `claude mcp get blender` |
-| Addon BlenderMCP | `~/.var/app/org.blender.Blender/config/blender/5.2/scripts/addons/` | activado y guardado en preferencias |
-| Lanzador | `~/.local/bin/blender-mcp` | abre Blender y arranca el servidor en `localhost:9876` |
+The scene is generated **entirely from scripts**, idempotently: every pass calls
+`purge()` and rebuilds. Edit a `.py`, re-run `run.py`, and you have the new
+scene. The `.blend` is the output, not the source — which is why it is not
+versioned.
 
-Para trabajar: ejecuta `blender-mcp`. Si abres Blender desde el menú, activa el servidor
-a mano en el visor 3D con `N` → pestaña **BlenderMCP** → *Connect to Claude*.
+```bash
+blender --background --python blender/run.py
+```
 
-## Estructura de la escena
-
-La escena se genera **por completo desde scripts**, de forma idempotente: cada pasada
-llama a `purge()` y reconstruye. Editas un `.py`, reejecutas `run.py` y tienes la escena
-nueva. El `.blend` es el resultado, no la fuente.
-
-| Fichero | Contenido |
+| File | Contents |
 |---|---|
-| `bh_lib.py` | primitivas sin UVs (`box`, `tube`, `dome`, `cable`) y materiales base |
-| `bh_build.py` | colmena, soporte, mástil, cámara cenital y visualización del encuadre |
-| `bh_electronics.py` | caja estanca, PCB, sensores PIR, termómetros y bus de cableado |
-| `bh_env.py` | materiales PBR texturizados, terreno, césped y flores (Geometry Nodes) |
-| `bh_bees.py` | panal hexagonal y población de abejas |
-| `bh_render.py` | mundo HDRI, luces, cámaras, ajustes de Cycles y colecciones |
-| `bh_post.py` | colmenar de fondo por instanciación |
-| `bh_shots.py` | serie de tomas finales y postproducción |
-| `run.py` | ejecuta todo en orden en un espacio de nombres común |
+| `bh_lib.py` | UV-less primitives (`box`, `tube`, `dome`, `cable`) and base materials |
+| `bh_build.py` | hive, stand, mast, top-down camera and framing visualisation |
+| `bh_electronics.py` | weatherproof box, PCB, PIR sensors, thermometers and the wiring bus |
+| `bh_env.py` | textured PBR materials, terrain, grass and flowers (Geometry Nodes) |
+| `bh_bees.py` | hexagonal comb and bee population |
+| `bh_render.py` | HDRI world, lights, cameras, Cycles settings and collections |
+| `bh_post.py` | background apiary by instancing |
+| `bh_shots.py` | the final shot series and post-processing |
+| `run.py` | runs everything in order, in one shared namespace |
 
-Reconstruir y renderizar desde fuera de Blender:
+## Working interactively
+
+What is set up on the development machine:
+
+| Piece | Where | Notes |
+|---|---|---|
+| Blender 5.2 LTS | flatpak `--user` | no sudo; **sandboxed: it cannot see `/tmp`**, use paths under `$HOME` |
+| `uv` / `uvx` | `~/.local/bin` | |
+| MCP `blender-mcp` | user scope in Claude Code | `claude mcp get blender` |
+| BlenderMCP add-on | `~/.var/app/org.blender.Blender/config/blender/5.2/scripts/addons/` | enabled and saved in preferences |
+| Launcher | `~/.local/bin/blender-mcp` | opens Blender and starts the server on `localhost:9876` |
+
+Run `blender-mcp` to work. If you open Blender from the menu instead, start the
+server by hand in the 3D viewport: `N` → **BlenderMCP** tab → *Connect to Claude*.
+
+To rebuild and render against a running instance from outside Blender:
 
 ```bash
 python3 -c "
 import sys; sys.path.insert(0,'$HOME/.local/share/blender-mcp')
 import bmcp
-print(bmcp.run(open('$HOME/Documents/beehaviour-2/blender/run.py').read(), timeout=600)['result'])
+print(bmcp.run(open('blender/run.py').read(), timeout=600)['result'])
 "
 ```
 
-`bmcp.py` es un puente de ~30 líneas que habla el mismo socket que usa el MCP.
+`bmcp.py` is a ~30-line bridge speaking the same socket the MCP server uses.
 
-## Cámaras
+## Cameras
 
-- **Cam_Hero** — plano general 3/4.
-- **Cam_Cenital** — *la cámara del sistema*: 38,9 mm a 0,50 m sobre la tabla de vuelo,
-  encuadre 16:9 de 464 × 261 mm. Es la vista que alimentaría `beetrack.py`.
-- **Cam_Piquera**, **Cam_Visor**, **Cam_Detalle** — piquera con abejas, sensores
-  interiores y electrónica.
+- **Cam_Hero** — wide three-quarter shot.
+- **Cam_Cenital** — *the system's camera*: 38.9 mm at 0.50 m above the landing board,
+  a 16:9 frame of 464 × 261 mm. This is the view that would feed `beetrack.py`.
+- **Cam_Piquera**, **Cam_Visor**, **Cam_Detalle** — the entrance with bees, the
+  internal sensors, and the electronics.
 
-`viz(True/False)` enciende o apaga el overlay técnico (frustum y plano cenital).
+`viz(True/False)` turns the technical overlay (frustum and top-down plane) on and
+off.
 
-## Serie de tomas
+## Shot series
 
-`bh_shots.correr()` genera las seis en `renders/`. Acepta un filtro por nombre para
-rehacer solo algunas: `correr(filtro={"05_electronica"})`.
+`bh_shots.correr()` generates all six into `renders/`. It takes a name filter to
+redo only some: `correr(filtro={"05_electronica"})`.
 
-| Fichero | Qué muestra |
+| File | What it shows |
 |---|---|
-| `01_general.png` | plano general con overlay técnico (frustum + plano cenital) |
-| `02_general_limpio.png` | el mismo plano sin overlay |
-| `03_piquera_abejas.png` | piquera, tabla de vuelo y abejas |
-| `04_visor_sensores.png` | PIR, termómetro interior y bus en serie tras el visor |
-| `05_electronica.png` | placa con SoC, microcontrolador y regleta de sensores |
-| `06_vista_camara.png` | **lo que ve la cámara del sistema**, 1920×1080 |
+| `01_general.png` | the wide shot with the technical overlay (frustum + top-down plane) |
+| `02_general_limpio.png` | the same shot without the overlay |
+| `03_piquera_abejas.png` | the entrance, the landing board and the bees |
+| `04_visor_sensores.png` | PIR, indoor thermometer and the series bus behind the window |
+| `05_electronica.png` | the board with SoC, microcontroller and sensor terminal block |
+| `06_vista_camara.png` | **what the system's camera sees**, 1920×1080 |
 
-## Decisiones que no son obvias
+Downscaled copies of these live in [../docs/renders/](../docs/renders/); the
+full-size PNGs are not versioned.
 
-- **Cycles va por CPU.** La Radeon 680M integrada no está soportada por HIP. 12 hilos,
-  con muestreo adaptativo y denoise para compensar.
-- **Nada de UVs.** Las mallas se generan con `from_pydata`, que no trae despliegue. Las
-  texturas se aplican con **proyección BOX** sobre coordenadas de objeto.
-- **Césped con Geometry Nodes, no partículas.** El sistema de partículas clásico
-  evalúa las 140 000 instancias pero **no llega al render** en Blender 5.
-- **Panal hexagonal por suma de tres ondas a 0/60/120°.** Cizallar un Voronoi no vale:
-  mide distancias en su espacio de entrada, así que las celdas salen en rombo.
-- **Cuadros en "sentido cálido"** (cara del panal hacia el visor). Montados de frente a
-  fondo solo se vería su canto.
-- **El denoiser necesita albedo y normal.** Sin las pasadas auxiliares, OpenImageDenoise
-  embarra los fondos planos y desenfocados: pocas muestras y poco contraste le hacen
-  inventar manchas. Se ve en el cielo y las colinas.
-- **No se ilumina detrás de un cristal.** La primera versión puso un punto de luz dentro
-  de la caja estanca: aunque se oculte a cámara (`visible_camera = False`, que solo afecta
-  al rayo primario), los rayos reflejados y refractados siguen viéndola y salen dos
-  reventones blancos sobre la tapa. La luz va fuera, alta y muy lateral, para que el
-  reflejo especular caiga fuera del objetivo.
-- **Postproducción fuera del compositor.** En Blender 5 `scene.node_tree` desapareció en
-  favor de `compositing_node_group`, que no recibe el render por su entrada. El halo,
-  el viñeteado y la saturación se aplican con numpy sobre el PNG, en `bh_shots.postpro`.
+## Decisions that are not obvious
 
-## Recursos externos
+- **Cycles runs on CPU.** The integrated Radeon 680M is not supported by HIP. 12
+  threads, with adaptive sampling and denoising to compensate.
+- **No UVs anywhere.** The meshes are generated with `from_pydata`, which carries no
+  unwrap. Textures are applied with **BOX projection** over object coordinates.
+- **Grass with Geometry Nodes, not particles.** The classic particle system
+  evaluates all 140,000 instances but **never reaches the render** in Blender 5.
+- **Hexagonal comb from three waves summed at 0/60/120°.** Shearing a Voronoi does
+  not work: it measures distances in its input space, so the cells come out as
+  rhombi.
+- **Frames mounted the "warm way"** (comb face towards the window). Mounted
+  front-to-back you would only see their edge.
+- **The denoiser needs albedo and normal.** Without the auxiliary passes,
+  OpenImageDenoise smears flat, out-of-focus backgrounds: few samples and low
+  contrast make it invent blotches. You can see it in the sky and the hills.
+- **Do not light from behind glass.** The first version put a point light inside the
+  weatherproof box: even hidden from the camera (`visible_camera = False`, which
+  only affects the primary ray), reflected and refracted rays still see it and two
+  white blowouts appear on the lid. The light goes outside, high and well off to
+  the side, so the specular reflection falls outside the lens.
+- **Post-processing outside the compositor.** In Blender 5 `scene.node_tree` was
+  dropped in favour of `compositing_node_group`, which does not receive the render
+  on its input. The glow, the vignette and the saturation are applied with numpy
+  over the PNG, in `bh_shots.postpro`.
 
-HDRI y texturas de [Poly Haven](https://polyhaven.com), **CC0**, en `assets/`:
-`kloppenheim_05` (cielo), `coated_pine` (madera), `sparse_grass` (suelo),
-`metal_plate` (chapa). Van empaquetados dentro del `.blend`.
+## External assets
+
+HDRI and textures from [Poly Haven](https://polyhaven.com), **CC0**, in
+`assets/`: `kloppenheim_05` (sky), `coated_pine` (wood), `sparse_grass` (ground),
+`metal_plate` (sheet metal). They get packed inside the `.blend`. Neither
+`assets/` nor the `.blend` files are versioned.
 
 ## Checkpoints
 
-`beehaviour_estacion.blend` es el archivo vivo. Los `_cp1`, `_cp2_entorno` y
-`_cp3_colmenar` son puntos de guardado intermedios por si hay que volver atrás.
+Locally, `beehaviour_estacion.blend` is the live file, and `_cp1`,
+`_cp2_entorno`, `_cp3_colmenar` and the rest are intermediate save points in case
+you need to go back. None of them are in the repository — rebuild from the
+scripts instead.

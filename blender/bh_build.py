@@ -16,7 +16,7 @@ SUPER_H = 0.159
 SUPER_Z1 = BROOD_Z1 + SUPER_H            # 0.860
 MAST_X, MAST_Y = -0.50, -0.30
 CAM_X, CAM_Y = 0.0, -0.325
-CAM_ALT = 0.30            # altura sobre la tabla de vuelo (DISENO.md 3.1 y dataset Mendeley)
+CAM_ALT = 0.30            # altura sobre la tabla de vuelo (DESIGN.md 3.1 y dataset Mendeley)
 CAM_LENS = 24.0           # cubre 45 x 25 cm a esa altura: tabla entera + aire por delante
 TABLA_Y, TABLA_D, TABLA_TILT = -0.322, 0.200, rad(-7)
 TABLA_CZ = BOARD_Z - 0.002
@@ -174,7 +174,7 @@ for sx in (-1, 1):
     reg(tube(f"LED_IR_{sx}", 0.0055, 0.003, (CAM_X + sx * 0.028, CAM_Y, CAM_Z - 0.004), mat=M['ir'], n=16))
 
 # visera: sombra permanente sobre el objetivo, evita sol directo y sombras moviles
-# que ensucian la deteccion (DISENO.md, notas de encuadre)
+# que ensucian la deteccion (DESIGN.md, notas de encuadre)
 VIS_Z = ARM_Z + 0.030
 reg(box("Camara_Visera", (0.205, 0.175, 0.006), (CAM_X, CAM_Y - 0.018, VIS_Z),
         rot=(rad(-9), 0, 0), mat=M['abs_mid'], bev=0.002))

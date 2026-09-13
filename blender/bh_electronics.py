@@ -85,7 +85,7 @@ reg(tube("Termo_Exterior", 0.0058, 0.030, (SH_X, MAST_Y, SH_Z - 0.042), mat=M['w
 reg(tube("Termo_Exterior_Punta", 0.0042, 0.008, (SH_X, MAST_Y, SH_Z - 0.060), mat=M['steel'], n=16))
 
 # ------------------------------------- sensor de movimiento (acelerometro)
-# DISENO.md 3.3: detecta robo, vuelco o golpe, asi que va atornillado rigido a la
+# DESIGN.md 3.3: detecta robo, vuelco o golpe, asi que va atornillado rigido a la
 # estructura, no mirando a las abejas. Bajo el vuelo del techo, protegido de la lluvia.
 IMU_X = -(BX + 0.011)
 IMU_Y, IMU_Z = -0.060, 0.790

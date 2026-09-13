@@ -1,12 +1,10 @@
-# La escena se reconstruye desde los .py: el .blend es resultado, no fuente.
-# Empaquetado con HDRI y texturas pesa ~71 MB, no tiene sentido versionarlo.
+# The scene is rebuilt from the .py files: the .blend is output, not source.
+# Packed with the HDRI and textures it weighs ~71 MB, not worth versioning.
 *.blend
 *.blend[0-9]
 
-# Recursos descargados de Poly Haven (CC0). Se rebajan con los scripts si hacen falta.
+# Assets downloaded from Poly Haven (CC0). The scripts fetch them on demand.
 assets/
 
-# Renders intermedios de prueba
-renders/t_*.png
-renders/preview_*.png
-renders/diag*.png
+# Renders. Downscaled copies of the final six live in ../docs/renders/.
+renders/

@@ -1,112 +1,112 @@
-# Beehaviour box — app de la caja (Arduino UNO Q)
+# Beehaviour box — the box's app (Arduino UNO Q)
 
-App de App Lab que lee los sensores de la colmena y los sirve en local, sin
-internet y sin nube. Para el diseño no técnico ver [../DISEÑO.md](../DISEÑO.md).
+An App Lab app that reads the hive's sensors and serves them locally, with no
+internet and no cloud. For the non-technical design see [../DESIGN.md](../DESIGN.md).
 
-Acabará en su propio repositorio; por ahora vive aquí.
+It will end up in its own repository; for now it lives here.
 
-## Estructura
-
-```
-app.yaml            declara los bricks: dbstorage_tsstore (InfluxDB) y web_ui
-sketch/sketch.ino   corre en el STM32: lee los Modulino y los manda por el Bridge
-sketch/sketch.yaml  versiones de librerías fijadas a lo que hay cacheado en la placa
-python/main.py      corre en el Linux: agrega, guarda, sirve API y empuja el directo
-assets/             la web (HTML/CSS/JS a pelo, sin framework y sin CDN)
-```
-
-## Por qué hay un sketch
-
-El conector Qwiic de la UNO Q está cableado al **segundo bus I2C del
-microcontrolador**, no al SoC Qualcomm. Desde el Linux los Modulino no se ven:
-`/dev/i2c-0` está vacío, `i2c-1` es el bus interno y `i2c-2` es el canal AUX del
-chip de vídeo. Así que se leen en el micro y cada muestra viaja al Python por el
-Bridge (`arduino-router`, socket en `/var/run/arduino-router.sock`).
-
-## Flujo
+## Layout
 
 ```
-Modulino --I2C(Wire1)--> sketch --Bridge.notify--> main.py --+--> InfluxDB (histórico)
+app.yaml            declares the bricks: dbstorage_tsstore (InfluxDB) and web_ui
+sketch/sketch.ino   runs on the STM32: reads the Modulinos and sends them over the Bridge
+sketch/sketch.yaml  library versions pinned to whatever is cached on the board
+python/main.py      runs on the Linux side: aggregates, stores, serves the API and pushes live data
+assets/            the web UI (plain HTML/CSS/JS, no framework and no CDN)
+```
+
+## Why there is a sketch at all
+
+The UNO Q's Qwiic connector is wired to the **microcontroller's second I2C bus**,
+not to the Qualcomm SoC. From Linux the Modulinos are invisible: `/dev/i2c-0` is
+empty, `i2c-1` is the internal bus and `i2c-2` is the video chip's AUX channel.
+So they are read on the MCU and each sample travels to Python over the Bridge
+(`arduino-router`, socket at `/var/run/arduino-router.sock`).
+
+## Flow
+
+```
+Modulino --I2C(Wire1)--> sketch --Bridge.notify--> main.py --+--> InfluxDB (history)
                                                              |
-                                                             +--> Socket.IO (directo)
+                                                             +--> Socket.IO (live)
                                                              |
-                                                             +--> /api/... (la web)
+                                                             +--> /api/... (the web UI)
 ```
 
 ## API
 
-| Endpoint | Qué devuelve |
+| Endpoint | What it returns |
 |---|---|
-| `GET /api/status` | qué sensores hay, su estado, últimos valores, si el reloj es fiable |
-| `GET /api/history/{metric}/{start}/{window}` | serie agregada, p. ej. `/api/history/temperature/-24h/15m` |
+| `GET /api/status` | which sensors are there, their state, latest values, whether the clock is trustworthy |
+| `GET /api/history/{metric}/{start}/{window}` | an aggregated series, e.g. `/api/history/temperature/-24h/15m` |
 
-El directo va por Socket.IO: un mensaje por métrica (`temperature`, `humidity`,
-`accel_*`) y uno `sensors` cuando cambia el hardware conectado.
+Live data goes over Socket.IO: one message per metric (`temperature`,
+`humidity`, `accel_*`) and one `sensors` message when the attached hardware
+changes.
 
-## Estados de sensor
+## Sensor states
 
-No son dos, son tres, y la diferencia importa:
+There are three, not two, and the difference matters:
 
-| Estado | Significado | La web |
+| State | Meaning | The web UI |
 |---|---|---|
-| `absent` | no se ha visto desde el arranque | no lo dibuja |
-| `present` | reportando | tarjeta normal |
-| `stale` | reportó antes y lleva >30 s callado | tarjeta en gris con la hora del último dato |
+| `absent` | not seen since boot | does not draw it |
+| `present` | reporting | normal card |
+| `stale` | reported before, silent for >30 s | greyed-out card with the time of the last reading |
 
-En el campo un sensor que se calla es en sí mismo un aviso (cable suelto,
-humedad, un bicho). Meterlo en `absent` enseñaría una pantalla feliz con media
-colmena sin vigilar.
+Out in the field, a sensor that goes quiet is itself an alert (a loose cable,
+damp, an insect). Folding it into `absent` would show a cheerful screen with
+half the hive unmonitored.
 
-## Conectarse desde el móvil
+## Connecting from a phone
 
-La caja levanta su propia red. No hay internet detrás: la contraseña del WiFi es
-toda la autenticación, la API no lleva login.
+The box brings up its own network. There is no internet behind it: the WiFi
+password is the whole of the authentication, the API has no login.
 
 | | |
 |---|---|
-| Red | `beehaviour-colmena-01` |
-| Contraseña | `colmena2026` |
-| Dirección | http://192.168.4.1 (o `Beehaviour.local`) |
+| Network | `beehaviour-colmena-01` |
+| Password | `colmena2026` |
+| Address | http://192.168.4.1 (or `Beehaviour.local`) |
 
-El AP es una conexión de NetworkManager llamada `beehaviour-ap`: WPA2-CCMP,
-banda 2,4 GHz canal 6, `ipv4.method shared` con IP fija 192.168.4.1/24. El DHCP
-lo pone el dnsmasq que NetworkManager arranca para el modo compartido, con rango
-.10–.254.
+The AP is a NetworkManager connection called `beehaviour-ap`: WPA2-CCMP, 2.4 GHz
+band channel 6, `ipv4.method shared` with a static 192.168.4.1/24. DHCP comes
+from the dnsmasq that NetworkManager starts for shared mode, range .10-.254.
 
-Está en `autoconnect yes` con `autoconnect-priority -999`, o sea que si hay una
-red conocida al alcance la placa se conecta a ella, y si no levanta la suya. Así
-se puede seguir entrando por SSH en casa sin perder el comportamiento de campo.
+It is set to `autoconnect yes` with `autoconnect-priority -999`, meaning that if
+a known network is in range the board joins it, and otherwise brings up its own.
+That way you can still SSH into it at home without losing the field behaviour.
 
 ```bash
-nmcli connection up beehaviour-ap     # levantarlo a mano
-nmcli connection down beehaviour-ap   # bajarlo
+nmcli connection up beehaviour-ap     # bring it up by hand
+nmcli connection down beehaviour-ap   # take it down
 ```
 
-### Portal cautivo
+### Captive portal
 
-La app escucha en el **puerto 80** y responde a las URLs que los móviles piden
-nada más conectarse para comprobar si hay internet (`/generate_204` en Android,
-`/hotspot-detect.html` en iOS, etc.) con un 302 a `http://192.168.4.1/`. El
-sistema operativo lo interpreta como "aquí hay un portal" y abre la pantalla
-solo.
+The app listens on **port 80** and answers the URLs phones request right after
+connecting, to check whether there is internet (`/generate_204` on Android,
+`/hotspot-detect.html` on iOS, and so on), with a 302 to `http://192.168.4.1/`.
+The operating system reads that as "there is a portal here" and opens the screen
+by itself.
 
-Son rutas concretas, no un comodín: una ruta `/{path:path}` taparía los ficheros
-estáticos de los que está hecha la propia web.
+These are specific routes, not a catch-all: a `/{path:path}` route would shadow
+the static files the web UI is made of.
 
-Para que funcione falta además que el DNS resuelva *cualquier* dominio a la caja.
-Eso toca un fichero de root, así que hay que ponerlo a mano una vez:
+For it to work, DNS also has to resolve *any* domain to the box. That touches a
+root-owned file, so it has to be set up by hand once:
 
 ```bash
 adb shell -t 'sudo sh -c "echo address=/#/192.168.4.1 > /etc/NetworkManager/dnsmasq-shared.d/beehaviour-captive.conf"'
 adb shell 'nmcli connection down beehaviour-ap; nmcli connection up beehaviour-ap'
 ```
 
-Sin eso la web sigue funcionando escribiendo la dirección, pero la pantalla no
-salta sola.
+Without it the web UI still works if you type the address, but the screen does
+not pop up on its own.
 
-## Ejecutar
+## Running it
 
-Con la placa conectada por USB:
+With the board connected over USB:
 
 ```bash
 adb push box/. /home/arduino/ArduinoApps/beehaviour-box/
@@ -114,45 +114,45 @@ adb shell 'TMPDIR=/tmp arduino-app-cli app start user:beehaviour-box'
 adb shell 'TMPDIR=/tmp arduino-app-cli app logs user:beehaviour-box'
 ```
 
-Para verlo desde el portátil sin WiFi todavía, se redirige el puerto por el
-propio cable:
+To see it from a laptop before the WiFi is up, forward the port over the cable
+itself:
 
 ```bash
 adb forward tcp:7000 tcp:7000
-# y abrir http://localhost:7000
+# then open http://localhost:7000
 ```
 
-## Trampas encontradas
+## Traps found along the way
 
-- **`TMPDIR`**. El demonio de ADB fija `TMPDIR=/data/local/tmp`, que es una ruta
-  de Android y en el Debian de la placa no existe. Sin `TMPDIR=/tmp` delante, la
-  grabación del sketch falla con `Stat /Data/Local/Tmp: No Such File Or
-  Directory`. Solo pasa por ADB; desde App Lab o por SSH no.
-- **Librerías sin red**. La placa no tiene internet, así que el `sketch.yaml`
-  tiene que pedir exactamente las versiones cacheadas en
-  `/home/arduino/.arduino15/internal`. Cualquier otra manda la compilación a
-  `downloads.arduino.cc` y falla. Ojo: ahí está `ArxTypeTraits 0.3.2` y
-  `Arduino_Modulino 0.6.1`, no las del ejemplo oficial.
-- **Sin CDN**. Los ejemplos de Arduino cargan Chart.js desde jsdelivr. Aquí las
-  gráficas son SVG dibujado a mano para no depender de internet.
-- **Retención**. `TimeSeriesStore` guarda 7 días por defecto. La colmena se
-  visita cada una o dos semanas, así que está puesto a 90.
-- **El reloj**. La placa no tiene RTC ni NTP: al conectarla iba seis semanas
-  atrasada. `/api/status` devuelve `clock_ok` comparando con 2026-01-01, pero eso
-  solo detecta el caso salvaje. Pendiente de que la app corrija el desfase con la
-  hora del móvil.
+- **`TMPDIR`**. The ADB daemon sets `TMPDIR=/data/local/tmp`, an Android path that
+  does not exist on the board's Debian. Without `TMPDIR=/tmp` in front, flashing
+  the sketch fails with `Stat /Data/Local/Tmp: No Such File Or Directory`. It only
+  happens over ADB; from App Lab or over SSH it does not.
+- **Libraries with no network**. The board has no internet, so `sketch.yaml` has to
+  ask for exactly the versions cached in `/home/arduino/.arduino15/internal`.
+  Anything else sends the build off to `downloads.arduino.cc` and it fails. Note
+  those are `ArxTypeTraits 0.3.2` and `Arduino_Modulino 0.6.1`, not the ones from
+  the official example.
+- **No CDN**. The Arduino examples load Chart.js from jsdelivr. Here the charts are
+  hand-drawn SVG, so nothing depends on the internet.
+- **Retention**. `TimeSeriesStore` keeps 7 days by default. The hive is visited
+  every one or two weeks, so it is set to 90.
+- **The clock**. The board has no RTC and no NTP: out of the box it was six weeks
+  behind. `/api/status` returns `clock_ok` by comparing against 2026-01-01, but
+  that only catches the wild case. Still to do: have the app correct the offset
+  from the phone's time.
 
-## Un solo Thermo
+## Only one Thermo
 
-El Modulino Thermo es un HS3003 con dirección I2C fija (`0x44`) y sin pin de
-selección, así que **dos no pueden compartir el Qwiic**. El segundo tendría que
-colgar del otro bus (`Wire`, pines SDA/SCL del header, PB11/PB10) instanciando
-`HS300xClass(Wire)` y saltándose el envoltorio Modulino. Hace falta un cable
-Qwiic con los hilos sueltos. Mientras tanto la app funciona con uno.
+The Modulino Thermo is an HS3003 with a fixed I2C address (`0x44`) and no select
+pin, so **two cannot share the Qwiic bus**. The second one would have to hang off
+the other bus (`Wire`, the header's SDA/SCL pins, PB11/PB10), instantiating
+`HS300xClass(Wire)` and bypassing the Modulino wrapper. That needs a Qwiic cable
+with loose leads. In the meantime the app works with one.
 
-## Pendiente
+## To do
 
-- El DNS comodín del portal cautivo (ver arriba, necesita root una vez).
-- Corrección de reloj con la hora del móvil.
-- Sensor exterior, cuando haya cable.
-- Cámara: el conteo de abejas de `../src/` escribiendo en la misma base.
+- The captive portal's wildcard DNS (see above, needs root once).
+- Clock correction from the phone's time.
+- The outdoor sensor, once there is a cable.
+- The camera: bee counting from `../src/` writing into the same database.
