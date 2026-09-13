@@ -1,3 +1,5 @@
+![Beehaviour](docs/intro.gif)
+
 # Beehaviour
 
 A hive guardian that works without internet and without mobile coverage. A box
@@ -164,6 +166,7 @@ regenerated in seconds with `rerender.sh`. Short clips of both are in `media/`.
 | [plot_compare.py](src/plot_compare.py) | Activity chart: each method against the ground truth |
 | [make_dashboard.py](src/make_dashboard.py) | Generates the self-contained HTML the box serves |
 | [make_intruder_clip.py](src/make_intruder_clip.py) | Composites a synthetic intruder for the demo |
+| [logo_intro.py](src/logo_intro.py) | Draws the animated wordmark at the top of this README |
 | [beetrack.py](src/beetrack.py) | The earlier PoC, with no trained model: MOG2 + tracking. Kept as a baseline |
 
 ---

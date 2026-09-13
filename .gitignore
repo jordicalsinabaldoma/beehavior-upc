@@ -36,11 +36,9 @@ blender/renders/
 # The pixel-art demo film: out of the repository
 demo/
 
-# Panel design and visual identity experiments. Not part of the pipeline:
-# nothing imports them.
+# Panel design experiments. Not part of the pipeline: nothing imports them.
 out/mocks*/
 src/mock_panels*.py
-src/logo_intro.py
 
 # Byte-for-byte copy of models/bee11n.pt
 models/bee11n_e7.pt

@@ -33,6 +33,12 @@ derived from the dataset:
 
 The full dataset (7.8 GB) is not redistributed: download it from the DOI above.
 
+## Brand
+
+The wordmark, the hexagon mark and the intro animation at the top of the README
+are original work for this project, drawn from code by `src/logo_intro.py`
+(`--lang en|es`, `--poster` for a still). They are not derived from the dataset.
+
 ## Models
 
 - `models/bee11n.pt`: YOLO11n fine-tuned on the dataset above. AGPL-3.0, for the
