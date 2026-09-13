@@ -3,7 +3,7 @@
 ## Code
 
 All the code in this repository (`src/`, `box/`, `blender/`, the scripts at the
-root) is under the **GNU AGPL-3.0**, full text in [LICENSE](LICENSE).
+root) is under the GNU AGPL-3.0, full text in [LICENSE](LICENSE).
 
 The licence is imposed by a dependency: the detection pipeline uses
 [Ultralytics](https://github.com/ultralytics/ultralytics) YOLO11, which is
@@ -13,11 +13,11 @@ product needs an Ultralytics Enterprise licence.
 
 ## Data, videos and images derived from the dataset
 
-> Sledevic, Tomyslav (2024), **Labeled dataset for bee detection and direction
-> estimation on beehive landing boards**, V6, Mendeley Data.
+> Sledevic, Tomyslav (2024), Labeled dataset for bee detection and direction
+> estimation on beehive landing boards, V6, Mendeley Data.
 > DOI: [10.17632/8gb9r2yhfc.6](https://doi.org/10.17632/8gb9r2yhfc.6)
 > Vilnius Gediminas Technical University (VILNIUS TECH).
-> Licence: **CC BY 4.0**.
+> Licence: CC BY 4.0.
 
 Under that licence, with attribution, this repository redistributes material
 derived from the dataset:
@@ -43,7 +43,7 @@ The full dataset (7.8 GB) is not redistributed: download it from the DOI above.
 ## 3D mock-up
 
 `blender/` builds the scene from code. The assets it downloads come from
-[Poly Haven](https://polyhaven.com) and are **CC0**, so they impose no
+[Poly Haven](https://polyhaven.com) and are CC0, so they impose no
 conditions:
 
 - HDRI `kloppenheim_05`

@@ -17,7 +17,7 @@ assets/             the web UI (plain HTML/CSS/JS, no framework and no CDN)
 
 ## Why there is a sketch at all
 
-The UNO Q's Qwiic connector is wired to the **microcontroller's second I2C bus**,
+The UNO Q's Qwiic connector is wired to the microcontroller's second I2C bus,
 not to the Qualcomm SoC. From Linux the Modulinos are invisible: `/dev/i2c-0` is
 empty, `i2c-1` is the internal bus and `i2c-2` is the video chip's AUX channel.
 So they are read on the MCU and each sample travels to Python over the Bridge
@@ -84,7 +84,7 @@ nmcli connection down beehaviour-ap   # take it down
 
 ### Captive portal
 
-The app listens on **port 80** and answers the URLs phones request right after
+The app listens on port 80 and answers the URLs phones request right after
 connecting, to check whether there is internet (`/generate_204` on Android,
 `/hotspot-detect.html` on iOS, and so on), with a 302 to `http://192.168.4.1/`.
 The operating system reads that as "there is a portal here" and opens the screen
@@ -124,20 +124,20 @@ adb forward tcp:7000 tcp:7000
 
 ## Traps found along the way
 
-- **`TMPDIR`**. The ADB daemon sets `TMPDIR=/data/local/tmp`, an Android path that
+- `TMPDIR`. The ADB daemon sets `TMPDIR=/data/local/tmp`, an Android path that
   does not exist on the board's Debian. Without `TMPDIR=/tmp` in front, flashing
   the sketch fails with `Stat /Data/Local/Tmp: No Such File Or Directory`. It only
   happens over ADB; from App Lab or over SSH it does not.
-- **Libraries with no network**. The board has no internet, so `sketch.yaml` has to
+- Libraries with no network. The board has no internet, so `sketch.yaml` has to
   ask for exactly the versions cached in `/home/arduino/.arduino15/internal`.
   Anything else sends the build off to `downloads.arduino.cc` and it fails. Note
   those are `ArxTypeTraits 0.3.2` and `Arduino_Modulino 0.6.1`, not the ones from
   the official example.
-- **No CDN**. The Arduino examples load Chart.js from jsdelivr. Here the charts are
+- No CDN. The Arduino examples load Chart.js from jsdelivr. Here the charts are
   hand-drawn SVG, so nothing depends on the internet.
-- **Retention**. `TimeSeriesStore` keeps 7 days by default. The hive is visited
+- Retention. `TimeSeriesStore` keeps 7 days by default. The hive is visited
   every one or two weeks, so it is set to 90.
-- **The clock**. The board has no RTC and no NTP: out of the box it was six weeks
+- The clock. The board has no RTC and no NTP: out of the box it was six weeks
   behind. `/api/status` returns `clock_ok` by comparing against 2026-01-01, but
   that only catches the wild case. Still to do: have the app correct the offset
   from the phone's time.
@@ -145,7 +145,7 @@ adb forward tcp:7000 tcp:7000
 ## Only one Thermo
 
 The Modulino Thermo is an HS3003 with a fixed I2C address (`0x44`) and no select
-pin, so **two cannot share the Qwiic bus**. The second one would have to hang off
+pin, so two cannot share the Qwiic bus. The second one would have to hang off
 the other bus (`Wire`, the header's SDA/SCL pins, PB11/PB10), instantiating
 `HS300xClass(Wire)` and bypassing the Modulino wrapper. That needs a Qwiic cable
 with loose leads. In the meantime the app works with one.

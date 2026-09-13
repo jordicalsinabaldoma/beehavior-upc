@@ -1,7 +1,7 @@
 # Dataset sample
 
 A handful of files from the Mendeley dataset, so you can see the format and try
-the scripts without downloading 7.8 GB. **It is not enough to train on**: it is
+the scripts without downloading 7.8 GB. It is not enough to train on: it is
 14 frames.
 
 ```

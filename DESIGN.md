@@ -38,12 +38,12 @@ The camera is mounted about 30 cm above the landing board, looking down, so it
 sees both the board and the entrance slot. From that image the system does three
 things:
 
-**Hive activity.** It counts how many bees are on the landing board at any
+Hive activity. It counts how many bees are on the landing board at any
 moment, and how many go in and out. From that it builds each day's activity
 curve: quiet at dawn, busy at midday, nothing at night. Every hive has its own
 curve.
 
-**Abnormal-activity alert.** If on a day with good weather the activity at a
+Abnormal-activity alert. If on a day with good weather the activity at a
 given hour is far below or far above the usual, it raises a flag. It does not
 claim a cause; it says "something is going on here, come and look". That one
 signal covers several very different problems at once:
@@ -56,7 +56,7 @@ signal covers several very different problems at once:
 | Robbing (bees from other hives steal the honey) | Chaotic traffic, far heavier than normal |
 | Weak or sick colony | Activity tapering off slowly over weeks |
 
-**Intruder alert.** The system knows what a bee looks like. If something moving
+Intruder alert. The system knows what a bee looks like. If something moving
 shows up at the entrance that is clearly not a bee, especially if it is
 considerably larger, it raises an alert and saves a photo. This catches the
 Asian hornet (*Vespa velutina*), the European hornet, wasps, a mouse, a perched
@@ -120,12 +120,12 @@ Deliberately left out, for now:
 
 There is no real hive. The demo works like this:
 
-- **Camera:** the system processes real top-down entrance footage. Bee counting and
+- Camera: the system processes real top-down entrance footage. Bee counting and
   the activity curve are shown live. For the intruder alert, either footage with a
   hornet is used, or a dark object is placed on a real board in front of the camera.
-- **Temperature:** a sensor is warmed by hand, or cooled, to trigger the weak-colony alert.
-- **Motion:** the box is pushed or tilted to trigger the theft or tip-over alert.
-- **Screen:** the history and the alerts are shown on the connected phone or laptop.
+- Temperature: a sensor is warmed by hand, or cooled, to trigger the weak-colony alert.
+- Motion: the box is pushed or tilted to trigger the theft or tip-over alert.
+- Screen: the history and the alerts are shown on the connected phone or laptop.
 
 ---
 
@@ -142,7 +142,7 @@ There is no real hive. The demo works like this:
 
 ### Dataset
 
-**Bee Detection and Direction Estimation Dataset**
+Bee Detection and Direction Estimation Dataset
 <https://data.mendeley.com/datasets/8gb9r2yhfc/6>
 
 - Vilnius Gediminas Technical University (Lithuania). Version 6, August 2024.
@@ -181,15 +181,15 @@ There is no real hive. The demo works like this:
 
 ### Quick glossary
 
-- **Entrance (*piquera*):** the slot the bees go in and out through.
-- **Landing board (*tabla de vuelo*):** the ledge in front of the entrance where bees land.
-- **Swarming:** the colony splits and half of it leaves with the old queen. A loss of
+- Entrance (*piquera*): the slot the bees go in and out through.
+- Landing board (*tabla de vuelo*): the ledge in front of the entrance where bees land.
+- Swarming: the colony splits and half of it leaves with the old queen. A loss of
   bees and of the harvest.
-- **Queenless colony:** a colony with no queen. With no new brood, it dies out in weeks.
-- ***Vespa velutina*:** the Asian hornet, an invasive species that hunts bees at the
+- Queenless colony: a colony with no queen. With no new brood, it dies out in weeks.
+- *Vespa velutina*: the Asian hornet, an invasive species that hunts bees at the
   entrance. Established in Catalonia and northern Spain.
-- **Bee-eater:** a migratory bird that eats bees on the wing. It hunts at a distance
+- Bee-eater: a migratory bird that eats bees on the wing. It hunts at a distance
   and does not land at the entrance.
-- **Varroa:** a parasitic mite of the honeybee, the leading cause of colony loss
+- Varroa: a parasitic mite of the honeybee, the leading cause of colony loss
   worldwide. Not detected directly by this PoC.
-- **Robbing:** bees from other hives coming in to steal honey from a weak colony.
+- Robbing: bees from other hives coming in to steal honey from a weak colony.

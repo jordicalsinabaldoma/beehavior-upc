@@ -1,13 +1,13 @@
 # Beehaviour
 
-A hive guardian that works **without internet, without mobile coverage and
-without a cloud**. A box with a camera watches the hive entrance, counts the
-bees going in and out, flags anything that is not a bee, and stores it all on
-the device itself. When the beekeeper reaches the apiary, they join the box's
-own WiFi from their phone and see what has happened since the last visit.
+A hive guardian that works without internet and without mobile coverage. A box
+with a camera watches the hive entrance, counts the bees going in and out,
+flags anything that is not a bee, and stores it all on the device itself. When
+the beekeeper reaches the apiary, they join the box's own WiFi from their phone
+and see what has happened since the last visit.
 
 Hackathon proof of concept. The functional design, written for beekeepers and
-free of technical jargon, is in **[DESIGN.md](DESIGN.md)**.
+free of technical jargon, is in [DESIGN.md](DESIGN.md).
 
 ![The monitoring station in the apiary](docs/hero.jpg)
 
@@ -27,7 +27,7 @@ output for all three hives (`*_conteo.mp4`).
 
 You need neither the 7.8 GB dataset nor a GPU. Every detection from the three
 runs is saved in `out/*_dets.npz`, and the pipeline can replay them: counting
-and drawing come out **identical**, in seconds instead of minutes.
+and drawing come out identical, in seconds instead of minutes.
 
 ```bash
 git clone https://github.com/jordicalsinabaldoma/beehavior-upc.git
@@ -37,7 +37,7 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
-**1. The panel the beekeeper opens on their phone.** Generated straight from the
+1. The panel the beekeeper opens on their phone. Generated straight from the
 CSV, no video involved. It is the quickest thing to try:
 
 ```bash
@@ -51,7 +51,7 @@ CSV, no video involved. It is the quickest thing to try:
 Open it in a browser. There is a pre-generated example at
 [docs/panel_apicultor.html](docs/panel_apicultor.html).
 
-**2. Redraw the annotated video from the saved detections.** This one needs the
+2. Redraw the annotated video from the saved detections. This one needs the
 original video, which is not in the repo because of its size (see below). With
 it:
 
@@ -70,7 +70,7 @@ Or all three at once, with `VIDEOS_DIR` pointing at wherever they live:
 VIDEOS_DIR=/path/to/videos ./rerender.sh
 ```
 
-**3. Re-measure the quality** against the dataset's annotations, again without
+3. Re-measure the quality against the dataset's annotations, again without
 running the detector:
 
 ```bash
@@ -146,9 +146,9 @@ side panel, intruder threshold, confirmation delay.
 | [models/](models/) | The trained weights (21 MB) and the training curve |
 | [docs/](docs/) | README images, renders and the example panel |
 
-**What is missing, and why.** The original videos are 128-205 MB each, above
-GitHub's 100 MB per-file limit, and they belong to the Mendeley dataset, which
-already has a public DOI. The full annotated videos are 60-74 MB and are
+The original videos are not here. They are 128-205 MB each, above GitHub's
+100 MB per-file limit, and they belong to the Mendeley dataset, which already
+has a public DOI. The full annotated videos are 60-74 MB and are
 regenerated in seconds with `rerender.sh`. Short clips of both are in `media/`.
 
 ### The scripts
@@ -185,8 +185,8 @@ per-second CSV + event CSV + annotated video + phone panel
 
 ### The detector
 
-YOLO11n trained for 7 epochs on 1,756 labelled frames. The split is **by hive,
-not by frame**: the three hives that appear in the test videos (`20230609b`,
+YOLO11n trained for 7 epochs on 1,756 labelled frames. The split is by hive,
+not by frame: the three hives that appear in the test videos (`20230609b`,
 `20230711a`, `20230711b`) are held out of training entirely. Splitting frames at
 random would put two nearly identical consecutive frames one in train and one in
 val, and the metrics would come out inflated.
@@ -197,16 +197,16 @@ validation, never on the test videos.
 ### The counting, and why it is not a line crossing
 
 The obvious approach is to count crossings of a virtual line at the entrance.
-It does not work: a bee does not **cross** the edge of the landing board, it
-**disappears into** the slot. And the tracker loses and invents identities
+It does not work: a bee does not cross the edge of the landing board, it
+disappears into the slot. And the tracker loses and invents identities
 constantly once there are twenty bees piled up.
 
 Counting works by delayed confirmation instead:
 
-- **Going in**: a track is lost inside the entrance zone *and the spot where it
+- Going in: a track is lost inside the entrance zone *and the spot where it
   vanished stays empty* a moment later. If a bee shows up there again, it was
   the tracker swapping identities, not an entry.
-- **Coming out**: a track appears at the slot *and that spot was empty* before.
+- Coming out: a track appears at the slot *and that spot was empty* before.
 
 Each track counts at most once. The entrance zone is read from the dataset's
 annotated polygon (`--zone`), not tuned by hand.
@@ -220,13 +220,13 @@ falls short.
 ### The intruder
 
 The dataset contains bees only: there is no real Asian hornet footage. The
-intruder detector looks for **motion the bee detector does not explain**, large
+intruder detector looks for motion the bee detector does not explain, large
 and slow relative to the median bee in the scene, so it calibrates itself to the
 camera distance.
 
 [`make_intruder_clip.py`](src/make_intruder_clip.py) composites a synthetic
-intruder over the landing board to demonstrate it. **It is a stand-in
-for a demo, not evidence that real hornets are detected.**
+intruder over the landing board to demonstrate it. It is a stand-in
+for a demo, not evidence that real hornets are detected.
 
 ---
 
@@ -235,15 +235,15 @@ for a demo, not evidence that real hornets are detected.**
 Three 2-minute videos, 1080p at 50 fps, processed at 25 fps. None of these three
 hives was used for training.
 
-**Detection**, against the dataset's annotated boxes (IoU ≥ 0.3):
+Detection, against the dataset's annotated boxes (IoU ≥ 0.3):
 
 | video | annotated boxes | precision | recall | F1 |
 |---|---:|---:|---:|---:|
-| 20230609b-def | 15,164 | 0.812 | 0.826 | **0.819** |
-| 20230711a-fan | 63,721 | 0.904 | 0.912 | **0.908** |
-| 20230711b-fan | 36,428 | 0.871 | 0.798 | **0.833** |
+| 20230609b-def | 15,164 | 0.812 | 0.826 | 0.819 |
+| 20230711a-fan | 63,721 | 0.904 | 0.912 | 0.908 |
+| 20230711b-fan | 36,428 | 0.871 | 0.798 | 0.833 |
 
-**Counting**, against the same rules applied to the annotated trajectories:
+Counting, against the same rules applied to the annotated trajectories:
 
 | video | entries (truth → ours) | exits (truth → ours) |
 |---|---|---|
@@ -251,7 +251,7 @@ hives was used for training.
 | 20230711a-fan | 162 → 41 (−75 %) | 133 → 41 (−69 %) |
 | 20230711b-fan | 293 → 96 (−67 %) | 20 → 28 (+40 %) |
 
-**The counting undercounts, badly.** This is worth being explicit about:
+The counting undercounts, badly. This is worth being explicit about:
 per-frame detection is good (F1 0.82-0.91), but counting events requires holding
 each bee's identity for seconds, and that is where the tracker breaks. The worst
 case, `20230711a-fan`, averages 25 simultaneous bees on the board; at that
@@ -259,14 +259,14 @@ density tracks fragment and the "the spot stays empty" rule discards entries
 that did happen.
 
 For the actual use case this matters less than it looks. The system does not
-need the exact number, it needs to notice that **today this hive is behaving
-differently from how it normally behaves**. A constant bias does not break a
+need the exact number, it needs to notice that today this hive is behaving
+differently from how it normally behaves. A constant bias does not break a
 baseline. But the figure must not be presented as an exact count.
 
 The `out/*_actividad.png` charts compare, second by second, how many bees each
 method sees against the annotated ground truth.
 
-**Speed**: 29 ms per frame of detection (960×540, imgsz 640) on a laptop GPU.
+Speed: 29 ms per frame of detection (960×540, imgsz 640) on a laptop GPU.
 The higher figures in some of the `out/*.log` files are GPU contention with the
 renderer, not the detector. Not yet measured on the Arduino UNO Q.
 
@@ -278,7 +278,7 @@ renderer, not the detector. Not yet measured on the Arduino UNO Q.
 Modulino sensors are plugged in, stores them, serves them over its own WiFi and
 shows them in a web UI with no framework, no CDN and no internet. Its
 [README](box/README.md) covers the hardware traps, among them the fact that the
-UNO Q's Qwiic connector hangs off the **microcontroller's second I2C bus** and
+UNO Q's Qwiic connector hangs off the microcontroller's second I2C bus and
 not off the SoC, so from Linux the sensors are invisible and have to be read on
 the MCU and passed over the Bridge.
 
@@ -319,7 +319,7 @@ The renders are in [docs/renders/](docs/renders/).
 
 ## Licence and credits
 
-The code in this repository is under **AGPL-3.0** ([LICENSE](LICENSE)). That is
+The code in this repository is under AGPL-3.0 ([LICENSE](LICENSE)). That is
 not an aesthetic choice: the pipeline uses
 [Ultralytics](https://github.com/ultralytics/ultralytics) YOLO11, which is
 AGPL-3.0, and the weights in `models/` are a derivative work. Any closed
@@ -330,7 +330,7 @@ derive from:
 
 > Sledevic, Tomyslav (2024), *Labeled dataset for bee detection and direction
 > estimation on beehive landing boards*, V6, Mendeley Data,
-> [doi:10.17632/8gb9r2yhfc.6](https://doi.org/10.17632/8gb9r2yhfc.6), **CC BY 4.0**,
+> [doi:10.17632/8gb9r2yhfc.6](https://doi.org/10.17632/8gb9r2yhfc.6), CC BY 4.0,
 > Vilnius Gediminas Technical University.
 
 The 3D mock-up's textures and HDRI come from [Poly Haven](https://polyhaven.com)
