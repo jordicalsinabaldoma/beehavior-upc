@@ -2,6 +2,10 @@
 
 # Beehaviour
 
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blueviolet.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![YOLO11n](https://img.shields.io/badge/Detector-YOLO11n-FF6F00)](https://github.com/ultralytics/ultralytics)
+
 A hive guardian that works without internet and without mobile coverage. A box
 with a camera watches the hive entrance, counts the bees going in and out,
 flags anything that is not a bee, and stores it all on the device itself. When
@@ -10,6 +14,8 @@ and see what has happened since the last visit.
 
 Hackathon proof of concept. The functional design, written for beekeepers and
 free of technical jargon, is in [DESIGN.md](DESIGN.md).
+
+🎬 Demo video: [https://youtu.be/nuNUS15LLaE](https://youtu.be/nuNUS15LLaE)
 
 ![The monitoring station in the apiary](docs/hero.jpg)
 
