@@ -1,0 +1,22 @@
+t=  10.0s  in=4 out=0 board=3 intr=0  32 ms/frame
+t=  20.0s  in=14 out=3 board=16 intr=0  30 ms/frame
+t=  30.0s  in=28 out=6 board=18 intr=0  29 ms/frame
+t=  40.0s  in=39 out=9 board=18 intr=0  29 ms/frame
+t=  50.0s  in=50 out=16 board=21 intr=0  29 ms/frame
+t=  60.0s  in=62 out=22 board=17 intr=0  28 ms/frame
+t=  70.0s  in=66 out=24 board=7 intr=0  28 ms/frame
+t=  80.0s  in=73 out=24 board=15 intr=0  28 ms/frame
+t=  90.0s  in=78 out=25 board=13 intr=0  28 ms/frame
+t= 100.0s  in=85 out=26 board=15 intr=0  29 ms/frame
+t= 110.0s  in=90 out=27 board=14 intr=0  29 ms/frame
+t= 120.0s  in=95 out=28 board=5 intr=0  29 ms/frame
+
+=== summary ===
+video   : dataset-minimal/20230711b-fan.mp4
+frames  : 3002 processed, detection 960x540, render 1280x720, 25.0 fps
+detector: models/bee11n.pt  conf=0.4 imgsz=640
+speed   : 29 ms/frame detection only
+IN 96   OUT 28   net +68
+intruder alerts: 0
+bees on board: mean 13.3, max 29.3
+events: {'IN': 96, 'OUT': 28}

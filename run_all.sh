@@ -6,15 +6,19 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-PY=.venv/bin/python
 W=${1:-models/bee11n.pt}
-GT="data/Labeled dataset for bee detection and direction estimation on beehive landing boards/tracking_and_behavior"
+# Paths. Override with environment variables if the dataset lives elsewhere:
+#   DATASET=/mnt/data/bees VIDEOS_DIR=/mnt/data/bees/videos ./run_all.sh
+PY=${PYTHON:-.venv/bin/python}
+DATASET=${DATASET:-"data/Labeled dataset for bee detection and direction estimation on beehive landing boards"}
+GT=${GT:-"$DATASET/tracking_and_behavior"}
+VIDEOS_DIR=${VIDEOS_DIR:-"$GT"}
 VIDEOS=(20230609b-def 20230711a-fan 20230711b-fan)
 
 mkdir -p out
 for v in "${VIDEOS[@]}"; do
   echo "=============================================================== $v"
-  $PY src/beecount.py "dataset-minimal/$v.mp4" \
+  $PY src/beecount.py "$VIDEOS_DIR/$v.mp4" \
       --weights "$W" \
       --zone "$GT/entrance_zone_$v.txt" \
       --imgsz 640 --conf 0.40 --skip 2 \

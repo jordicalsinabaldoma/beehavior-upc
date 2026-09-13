@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beehaviour · HIVE 03</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#16120e;color:#eee;
+ font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:22px;margin:0;letter-spacing:.5px}
+.sub{color:#8a8279;font-size:13px}
+.status{margin:14px 0;padding:14px 16px;border-radius:12px;display:flex;
+ align-items:center;gap:12px}
+.status.ok{background:#16301c;border:1px solid #2f6b3c}
+.status.warn{background:#331a16;border:1px solid #8a3b2c}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.ok .dot{background:#5ac85a} .warn .dot{background:#e0503c}
+.status b{letter-spacing:1px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.card{background:#221c17;border-radius:12px;padding:14px 16px}
+.card .k{color:#8a8279;font-size:12px;letter-spacing:.6px;text-transform:uppercase}
+.card .v{font-size:30px;font-weight:600;margin-top:4px}
+.v.in{color:#5ac85a} .v.out{color:#f0a05a} .v.alert{color:#e0503c}
+section{background:#221c17;border-radius:12px;padding:14px 16px;margin:12px 0}
+section h2{font-size:13px;color:#8a8279;letter-spacing:.8px;text-transform:uppercase;margin:0 0 10px}
+.spark{width:100%;height:140px;display:block}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:6px 4px;border-bottom:1px solid #2e2822}
+td.t{color:#8a8279;width:74px} td.id{color:#6e675f;text-align:right}
+.e-in{color:#5ac85a} .e-out{color:#f0a05a} .e-alert{color:#e0503c;font-weight:600}
+.scroll{max-height:280px;overflow:auto}
+.pending{border:1px dashed #4a4038;background:none;color:#8a8279}
+footer{color:#6e675f;font-size:12px;margin:20px 0 8px;line-height:1.7}
+</style></head><body><div class="wrap">
+<header>
+  <h1>🐝 HIVE 03</h1>
+  <span class="sub">sincronizado por WiFi local · 13/09/2026 22:59</span>
+</header>
+
+<div class="status ok"><span class="dot"></span>
+  <div><b>NORMAL</b><div class="sub">actividad dentro de lo esperado</div></div></div>
+
+<div class="grid">
+  <div class="card"><div class="k">Entradas</div><div class="v in">95</div></div>
+  <div class="card"><div class="k">Salidas</div><div class="v out">28</div></div>
+  <div class="card"><div class="k">Pico en la tabla</div><div class="v">29</div></div>
+  <div class="card"><div class="k">Intrusos</div>
+    <div class="v ">0</div></div>
+</div>
+
+<section><h2>Actividad en la piquera</h2>
+  <svg viewBox="0 0 640 140" preserveAspectRatio="none" class="spark"><line x1="8" y1="132.0" x2="632" y2="132.0" stroke="#2e2822" stroke-width="1"/><line x1="8" y1="104.5" x2="632" y2="104.5" stroke="#2e2822" stroke-width="1"/><line x1="8" y1="77.0" x2="632" y2="77.0" stroke="#2e2822" stroke-width="1"/><line x1="8" y1="49.5" x2="632" y2="49.5" stroke="#2e2822" stroke-width="1"/><line x1="8" y1="22.0" x2="632" y2="22.0" stroke="#2e2822" stroke-width="1"/><polygon points="8,132 8.0,130.0 13.2,125.8 18.5,124.8 23.7,123.6 29.0,117.4 34.2,122.8 39.5,127.3 44.7,126.1 49.9,116.8 55.2,119.1 60.4,101.1 65.7,103.5 70.9,107.7 76.2,97.6 81.4,95.8 86.7,88.3 91.9,84.4 97.1,87.9 102.4,79.6 107.6,77.1 112.9,75.6 118.1,69.1 123.4,65.8 128.6,67.0 133.8,73.8 139.1,68.2 144.3,64.8 149.6,68.5 154.8,59.7 160.1,51.7 165.3,62.5 170.6,60.9 175.8,48.0 181.0,47.8 186.3,59.2 191.5,60.6 196.8,59.4 202.0,61.6 207.3,50.7 212.5,56.5 217.7,72.7 223.0,40.5 228.2,31.9 233.5,33.6 238.7,22.0 244.0,32.1 249.2,26.5 254.5,22.0 259.7,30.0 264.9,45.9 270.2,65.2 275.4,51.6 280.7,49.3 285.9,57.9 291.2,67.0 296.4,71.1 301.6,51.4 306.9,48.4 312.1,56.4 317.4,70.9 322.6,64.8 327.9,50.7 333.1,42.3 338.4,51.3 343.6,73.3 348.8,72.6 354.1,72.3 359.3,84.6 364.6,93.0 369.8,96.3 375.1,85.8 380.3,80.8 385.5,75.9 390.8,77.1 396.0,94.2 401.3,99.1 406.5,100.5 411.8,92.8 417.0,88.3 422.3,90.6 427.5,88.8 432.7,97.9 438.0,90.7 443.2,95.1 448.5,101.2 453.7,92.5 459.0,97.0 464.2,98.1 469.4,92.5 474.7,87.9 479.9,80.1 485.2,91.3 490.4,96.1 495.7,91.9 500.9,90.4 506.2,66.4 511.4,82.2 516.6,89.2 521.9,88.5 527.1,95.5 532.4,90.7 537.6,85.9 542.9,99.3 548.1,93.9 553.3,91.0 558.6,90.6 563.8,96.1 569.1,101.4 574.3,106.9 579.6,97.8 584.8,103.8 590.1,102.3 595.3,114.1 600.5,113.8 605.8,119.4 611.0,117.6 616.3,124.9 621.5,113.4 626.8,117.7 632.0,122.5 632.0,132" fill="#e0a83c22"/><polyline points="8.0,130.0 13.2,125.8 18.5,124.8 23.7,123.6 29.0,117.4 34.2,122.8 39.5,127.3 44.7,126.1 49.9,116.8 55.2,119.1 60.4,101.1 65.7,103.5 70.9,107.7 76.2,97.6 81.4,95.8 86.7,88.3 91.9,84.4 97.1,87.9 102.4,79.6 107.6,77.1 112.9,75.6 118.1,69.1 123.4,65.8 128.6,67.0 133.8,73.8 139.1,68.2 144.3,64.8 149.6,68.5 154.8,59.7 160.1,51.7 165.3,62.5 170.6,60.9 175.8,48.0 181.0,47.8 186.3,59.2 191.5,60.6 196.8,59.4 202.0,61.6 207.3,50.7 212.5,56.5 217.7,72.7 223.0,40.5 228.2,31.9 233.5,33.6 238.7,22.0 244.0,32.1 249.2,26.5 254.5,22.0 259.7,30.0 264.9,45.9 270.2,65.2 275.4,51.6 280.7,49.3 285.9,57.9 291.2,67.0 296.4,71.1 301.6,51.4 306.9,48.4 312.1,56.4 317.4,70.9 322.6,64.8 327.9,50.7 333.1,42.3 338.4,51.3 343.6,73.3 348.8,72.6 354.1,72.3 359.3,84.6 364.6,93.0 369.8,96.3 375.1,85.8 380.3,80.8 385.5,75.9 390.8,77.1 396.0,94.2 401.3,99.1 406.5,100.5 411.8,92.8 417.0,88.3 422.3,90.6 427.5,88.8 432.7,97.9 438.0,90.7 443.2,95.1 448.5,101.2 453.7,92.5 459.0,97.0 464.2,98.1 469.4,92.5 474.7,87.9 479.9,80.1 485.2,91.3 490.4,96.1 495.7,91.9 500.9,90.4 506.2,66.4 511.4,82.2 516.6,89.2 521.9,88.5 527.1,95.5 532.4,90.7 537.6,85.9 542.9,99.3 548.1,93.9 553.3,91.0 558.6,90.6 563.8,96.1 569.1,101.4 574.3,106.9 579.6,97.8 584.8,103.8 590.1,102.3 595.3,114.1 600.5,113.8 605.8,119.4 611.0,117.6 616.3,124.9 621.5,113.4 626.8,117.7 632.0,122.5" fill="none" stroke="#e0a83c" stroke-width="2.5" stroke-linejoin="round"/><text x="10" y="18" fill="#8a8279" font-size="11">max 29</text></svg>
+  <div class="sub">abejas en la tabla de vuelo, promedio por segundo · 120 s observados</div>
+</section>
+
+<section><h2>Eventos</h2><div class="scroll"><table><tr><td class="t">119.2 s</td><td class="e-in">entra</td><td class="id">#1820</td></tr><tr><td class="t">118.7 s</td><td class="e-in">entra</td><td class="id">#1810</td></tr><tr><td class="t">118.7 s</td><td class="e-in">entra</td><td class="id">#1819</td></tr><tr><td class="t">116.1 s</td><td class="e-in">entra</td><td class="id">#1801</td></tr><tr><td class="t">115.7 s</td><td class="e-out">sale</td><td class="id">#1804</td></tr><tr><td class="t">114.6 s</td><td class="e-in">entra</td><td class="id">#1795</td></tr><tr><td class="t">112.6 s</td><td class="e-in">entra</td><td class="id">#1774</td></tr><tr><td class="t">108.3 s</td><td class="e-in">entra</td><td class="id">#1726</td></tr><tr><td class="t">108.6 s</td><td class="e-out">sale</td><td class="id">#1730</td></tr><tr><td class="t">106.7 s</td><td class="e-in">entra</td><td class="id">#1684</td></tr><tr><td class="t">106.6 s</td><td class="e-in">entra</td><td class="id">#1695</td></tr><tr><td class="t">103.8 s</td><td class="e-in">entra</td><td class="id">#1669</td></tr><tr><td class="t">99.7 s</td><td class="e-in">entra</td><td class="id">#1614</td></tr><tr><td class="t">99.1 s</td><td class="e-in">entra</td><td class="id">#1611</td></tr><tr><td class="t">99.5 s</td><td class="e-in">entra</td><td class="id">#1632</td></tr><tr><td class="t">97.9 s</td><td class="e-in">entra</td><td class="id">#1592</td></tr><tr><td class="t">98.2 s</td><td class="e-in">entra</td><td class="id">#1604</td></tr><tr><td class="t">97.6 s</td><td class="e-in">entra</td><td class="id">#1608</td></tr><tr><td class="t">97.1 s</td><td class="e-out">sale</td><td class="id">#1596</td></tr><tr><td class="t">92.0 s</td><td class="e-in">entra</td><td class="id">#1489</td></tr><tr><td class="t">90.9 s</td><td class="e-in">entra</td><td class="id">#1499</td></tr><tr><td class="t">86.2 s</td><td class="e-in">entra</td><td class="id">#1424</td></tr><tr><td class="t">85.7 s</td><td class="e-out">sale</td><td class="id">#1423</td></tr><tr><td class="t">81.5 s</td><td class="e-in">entra</td><td class="id">#1365</td></tr><tr><td class="t">81.3 s</td><td class="e-in">entra</td><td class="id">#1367</td></tr><tr><td class="t">82.0 s</td><td class="e-in">entra</td><td class="id">#1385</td></tr><tr><td class="t">80.7 s</td><td class="e-in">entra</td><td class="id">#1346</td></tr><tr><td class="t">77.7 s</td><td class="e-in">entra</td><td class="id">#1319</td></tr><tr><td class="t">77.5 s</td><td class="e-in">entra</td><td class="id">#1328</td></tr><tr><td class="t">75.5 s</td><td class="e-in">entra</td><td class="id">#1187</td></tr><tr><td class="t">74.3 s</td><td class="e-in">entra</td><td class="id">#1200</td></tr><tr><td class="t">74.0 s</td><td class="e-in">entra</td><td class="id">#1260</td></tr><tr><td class="t">69.8 s</td><td class="e-in">entra</td><td class="id">#1214</td></tr><tr><td class="t">70.2 s</td><td class="e-in">entra</td><td class="id">#1217</td></tr><tr><td class="t">67.2 s</td><td class="e-in">entra</td><td class="id">#1128</td></tr><tr><td class="t">67.1 s</td><td class="e-in">entra</td><td class="id">#1122</td></tr><tr><td class="t">62.7 s</td><td class="e-in">entra</td><td class="id">#1126</td></tr><tr><td class="t">62.2 s</td><td class="e-out">sale</td><td class="id">#1021</td></tr><tr><td class="t">61.0 s</td><td class="e-out">sale</td><td class="id">#1065</td></tr><tr><td class="t">60.6 s</td><td class="e-in">entra</td><td class="id">#1026</td></tr></table></div></section>
+
+<section class="pending"><h2>Temperatura y humedad</h2>
+  Pendiente de conectar los dos sensores Modulino Thermo.
+  Compararan la temperatura del nido de cria con la exterior para detectar
+  colonia huerfana o enjambrazon proxima.
+</section>
+
+<section class="pending"><h2>Movimiento de la colmena</h2>
+  Pendiente de conectar el Modulino Movement, para avisar de robo o vuelco.
+</section>
+
+<footer>
+  Los datos de esta pagina salen del analisis de video real procesado en el
+  dispositivo. Nada se envia a internet.<br>
+  Beehaviour · prueba de concepto
+</footer>
+</div></body></html>

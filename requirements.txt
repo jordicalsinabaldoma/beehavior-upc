@@ -1,0 +1,12 @@
+# Pipeline de visión (src/). Instalar en un venv:
+#   python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+#
+# ultralytics arrastra torch y torchvision; en una máquina con GPU NVIDIA se
+# lleva además ~3 GB de ruedas CUDA. Para CPU sola, instalar antes:
+#   .venv/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+ultralytics==8.4.150
+opencv-python==5.0.0.93
+numpy==2.5.3
+scipy==1.18.1
+matplotlib==3.11.2
+pillow==12.3.0

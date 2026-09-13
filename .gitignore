@@ -1,17 +1,48 @@
 # Entorno Python
 .venv/
+__pycache__/
+*.pyc
 
-# Dataset (7.8 GB, descargable de Mendeley: https://data.mendeley.com/datasets/8gb9r2yhfc/6)
+# Dataset completo (7,8 GB). Se descarga de Mendeley:
+#   https://doi.org/10.17632/8gb9r2yhfc.6
+# En dataset-sample/ hay una muestra para ver el formato sin bajar nada.
 data/
 dataset.zip
 dataset-minimal/
 
-# Salidas generadas
-out/
+# Salidas generadas. De out/ sí se versionan las cifras y las detecciones
+# guardadas (ver las excepciones de abajo); los vídeos de 60 MB no.
+out/*
+!out/*.csv
+!out/*.log
+!out/*_eval.txt
+!out/*_actividad.png
+!out/*_dets.npz
 runs/
-*.mp4
-*.pt
 
-# Varios
-__pycache__/
-*.pyc
+# Pesos base de Ultralytics, se descargan solos en el primer uso
+yolo11n.pt
+
+# Vídeo original de la cámara de la caja (27 MB). En el repo va un bucle
+# corto con el mismo nombre; este es el largo, para grabar demos en local.
+box/assets/media/piquera_full.mp4
+
+# Blender: la escena se reconstruye desde blender/*.py, el .blend es resultado
+blender/*.blend
+blender/*.blend[0-9]
+blender/assets/
+blender/renders/
+
+# Película de demostración en pixel art: fuera del repo
+demo/
+
+# Exploraciones de diseño de panel
+out/mocks*/
+
+# Exploraciones de diseno de panel y de identidad visual, no forman parte del
+# pipeline: nadie las importa.
+src/mock_panels*.py
+src/logo_intro.py
+
+# Copia byte a byte de models/bee11n.pt
+models/bee11n_e7.pt

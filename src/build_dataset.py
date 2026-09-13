@@ -12,8 +12,8 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "data" / ("Labeled dataset for bee detection and direction "
-                       "estimation on beehive landing boards") / "detection"
+DATASET = ROOT / "data" / ("Labeled dataset for bee detection and direction "
+                           "estimation on beehive landing boards")
 
 # hives used by the three tracking videos -> held out from training
 TEST_HIVES = {"20230609b", "20230711a", "20230711b"}
@@ -21,12 +21,20 @@ TEST_HIVES = {"20230609b", "20230711a", "20230711b"}
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--src", default=str(DATASET / "detection"),
+                    help="the dataset's `detection` folder (one subfolder per hive)")
     ap.add_argument("--out", default=str(ROOT / "data" / "yolo_bees"))
     ap.add_argument("--step", type=int, default=2,
                     help="keep 1 of every N labeled frames (consecutive frames are near-identical)")
     ap.add_argument("--val-frac", type=float, default=0.1)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
+
+    src = Path(args.src)
+    if not src.is_dir():
+        raise SystemExit(f"not found: {src}\n"
+                         "Download the dataset from https://doi.org/10.17632/8gb9r2yhfc.6 "
+                         "and point --src at its `detection` folder.")
 
     out = Path(args.out)
     if out.exists():
@@ -38,7 +46,7 @@ def main():
     kept, skipped_hives, n_boxes = 0, [], 0
     counts = {"train": 0, "val": 0}
 
-    for hive_dir in sorted(SRC.glob("_bee_*")):
+    for hive_dir in sorted(src.glob("_bee_*")):
         hive = hive_dir.name.replace("_bee_", "")
         if hive in TEST_HIVES:
             skipped_hives.append(hive)

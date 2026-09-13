@@ -1,0 +1,21 @@
+t=  10.0s  in=3 out=0 board=4 intr=0  347 ms/frame
+t=  20.0s  in=8 out=1 board=7 intr=0  191 ms/frame
+t=  30.0s  in=19 out=1 board=12 intr=0  190 ms/frame
+t=  40.0s  in=31 out=2 board=5 intr=0  151 ms/frame
+t=  50.0s  in=38 out=3 board=8 intr=0  128 ms/frame
+t=  60.0s  in=41 out=4 board=6 intr=0  113 ms/frame
+t=  70.0s  in=44 out=5 board=8 intr=0  102 ms/frame
+t=  80.0s  in=49 out=6 board=10 intr=0  311 ms/frame
+t=  90.0s  in=58 out=7 board=11 intr=0  535 ms/frame
+t= 100.0s  in=69 out=7 board=2 intr=0  716 ms/frame
+t= 110.0s  in=79 out=9 board=10 intr=0  871 ms/frame
+
+=== summary ===
+video   : dataset-minimal/20230609b-def.mp4
+frames  : 2987 processed, detection 960x540, render 1280x720, 25.0 fps
+detector: models/bee11n.pt  conf=0.4 imgsz=640
+speed   : 991 ms/frame detection only
+IN 87   OUT 9   net +78
+intruder alerts: 0
+bees on board: mean 6.5, max 12.2
+events: {'IN': 87, 'OUT': 9}

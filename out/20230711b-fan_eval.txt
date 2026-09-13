@@ -1,0 +1,9 @@
+frames compared : 2968
+gt boxes        : 36428
+our detections  : 33379
+precision 0.871   recall 0.798   F1 0.833   (IoU>=0.3)
+
+ground-truth tracks in the zone : 3508
+same rules on ground truth      : IN 293   OUT 20
+ours                            : IN 96   OUT 28
+error                           : IN -197 (-67%)   OUT +8 (+40%)
