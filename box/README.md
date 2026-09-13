@@ -9,7 +9,7 @@ It will end up in its own repository; for now it lives here.
 
 | Alerts | Monitoring | Live entrance |
 |---|---|---|
-| ![Alert list](../docs/app/alerts.png) | ![Monitoring screen](../docs/app/monitor.png) | ![Live entrance view](../docs/app/live.png) |
+| <img src="../docs/app/alerts.png" width="260" alt="Alert list"> | <img src="../docs/app/monitor.png" width="260" alt="Monitoring screen"> | <img src="../docs/app/live.png" width="260" alt="Live entrance view"> |
 
 ## Layout
 
