@@ -30,6 +30,10 @@ Full clips are in [media/](media/): the pipeline's input
 ([`entrada_cenital_muestra.mp4`](media/entrada_cenital_muestra.mp4)) and its
 output for all three hives (`*_conteo.mp4`).
 
+## Team
+
+🐝 Jordi Calsina · Lluc Santamaria · Guido Biosca · Victor Abelló
+
 ---
 
 ## Getting started in two minutes
