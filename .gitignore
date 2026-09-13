@@ -1,0 +1,17 @@
+# Entorno Python
+.venv/
+
+# Dataset (7.8 GB, descargable de Mendeley: https://data.mendeley.com/datasets/8gb9r2yhfc/6)
+data/
+dataset.zip
+dataset-minimal/
+
+# Salidas generadas
+out/
+runs/
+*.mp4
+*.pt
+
+# Varios
+__pycache__/
+*.pyc
