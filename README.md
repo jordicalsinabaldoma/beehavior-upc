@@ -201,7 +201,7 @@ It does not work: a bee does not **cross** the edge of the landing board, it
 **disappears into** the slot. And the tracker loses and invents identities
 constantly once there are twenty bees piled up.
 
-So counting works by delayed confirmation instead:
+Counting works by delayed confirmation instead:
 
 - **Going in**: a track is lost inside the entrance zone *and the spot where it
   vanished stays empty* a moment later. If a bee shows up there again, it was
@@ -224,8 +224,8 @@ intruder detector looks for **motion the bee detector does not explain**, large
 and slow relative to the median bee in the scene, so it calibrates itself to the
 camera distance.
 
-To demonstrate it there is [`make_intruder_clip.py`](src/make_intruder_clip.py),
-which composites a synthetic intruder over the landing board. **It is a stand-in
+[`make_intruder_clip.py`](src/make_intruder_clip.py) composites a synthetic
+intruder over the landing board to demonstrate it. **It is a stand-in
 for a demo, not evidence that real hornets are detected.**
 
 ---
@@ -330,7 +330,7 @@ derive from:
 
 > Sledevic, Tomyslav (2024), *Labeled dataset for bee detection and direction
 > estimation on beehive landing boards*, V6, Mendeley Data,
-> [doi:10.17632/8gb9r2yhfc.6](https://doi.org/10.17632/8gb9r2yhfc.6) — **CC BY 4.0**,
+> [doi:10.17632/8gb9r2yhfc.6](https://doi.org/10.17632/8gb9r2yhfc.6), **CC BY 4.0**,
 > Vilnius Gediminas Technical University.
 
 The 3D mock-up's textures and HDRI come from [Poly Haven](https://polyhaven.com)

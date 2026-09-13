@@ -30,7 +30,7 @@ size, so the entrance never has to be tuned by hand per camera.
 
 ## Full dataset
 
-<https://doi.org/10.17632/8gb9r2yhfc.6> — CC BY 4.0. See [../CREDITS.md](../CREDITS.md)
+<https://doi.org/10.17632/8gb9r2yhfc.6>, CC BY 4.0. See [../CREDITS.md](../CREDITS.md)
 for the citation.
 
 Once downloaded, `src/build_dataset.py --src "<dataset>/detection"` assembles the

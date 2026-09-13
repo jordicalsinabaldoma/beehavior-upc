@@ -1,4 +1,4 @@
-# Beehaviour box — the box's app (Arduino UNO Q)
+# Beehaviour box: the app on the board (Arduino UNO Q)
 
 An App Lab app that reads the hive's sensors and serves them locally, with no
 internet and no cloud. For the non-technical design see [../DESIGN.md](../DESIGN.md).
@@ -12,7 +12,7 @@ app.yaml            declares the bricks: dbstorage_tsstore (InfluxDB) and web_ui
 sketch/sketch.ino   runs on the STM32: reads the Modulinos and sends them over the Bridge
 sketch/sketch.yaml  library versions pinned to whatever is cached on the board
 python/main.py      runs on the Linux side: aggregates, stores, serves the API and pushes live data
-assets/            the web UI (plain HTML/CSS/JS, no framework and no CDN)
+assets/             the web UI (plain HTML/CSS/JS, no framework and no CDN)
 ```
 
 ## Why there is a sketch at all

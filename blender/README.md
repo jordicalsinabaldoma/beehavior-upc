@@ -1,4 +1,4 @@
-# Beehaviour monitoring station — 3D scene
+# Beehaviour monitoring station: the 3D scene
 
 A Blender reconstruction of the physical build: a Langstroth hive with a
 top-down camera over the entrance, a control box holding the SoC and the
@@ -9,7 +9,7 @@ series.
 
 The scene is generated **entirely from scripts**, idempotently: every pass calls
 `purge()` and rebuilds. Edit a `.py`, re-run `run.py`, and you have the new
-scene. The `.blend` is the output, not the source — which is why it is not
+scene. The `.blend` is the output, not the source. That is why it is not
 versioned.
 
 ```bash
@@ -57,10 +57,10 @@ print(bmcp.run(open('blender/run.py').read(), timeout=600)['result'])
 
 ## Cameras
 
-- **Cam_Hero** — wide three-quarter shot.
-- **Cam_Cenital** — *the system's camera*: 38.9 mm at 0.50 m above the landing board,
+- **Cam_Hero**: wide three-quarter shot.
+- **Cam_Cenital**, *the system's camera*: 38.9 mm at 0.50 m above the landing board,
   a 16:9 frame of 464 × 261 mm. This is the view that would feed `beetrack.py`.
-- **Cam_Piquera**, **Cam_Visor**, **Cam_Detalle** — the entrance with bees, the
+- **Cam_Piquera**, **Cam_Visor**, **Cam_Detalle**: the entrance with bees, the
   internal sensors, and the electronics.
 
 `viz(True/False)` turns the technical overlay (frustum and top-down plane) on and
@@ -120,5 +120,5 @@ HDRI and textures from [Poly Haven](https://polyhaven.com), **CC0**, in
 
 Locally, `beehaviour_estacion.blend` is the live file, and `_cp1`,
 `_cp2_entorno`, `_cp3_colmenar` and the rest are intermediate save points in case
-you need to go back. None of them are in the repository — rebuild from the
+you need to go back. None of them are in the repository. Rebuild from the
 scripts instead.

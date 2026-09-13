@@ -35,7 +35,7 @@ The full dataset (7.8 GB) is not redistributed: download it from the DOI above.
 
 ## Models
 
-- `models/bee11n.pt` — YOLO11n fine-tuned on the dataset above. AGPL-3.0, for the
+- `models/bee11n.pt`: YOLO11n fine-tuned on the dataset above. AGPL-3.0, for the
   reason given further up.
 - `yolo11n.pt` (Ultralytics' COCO base weights) is not versioned; the library
   downloads it itself the first time you train.

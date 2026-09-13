@@ -1,4 +1,4 @@
-# Beehaviour — a local hive guardian
+# Beehaviour: a local hive guardian
 
 Hackathon project. Proof of concept of a hive surveillance box that works
 without internet, without mobile coverage and without a cloud. Everything is
@@ -57,8 +57,8 @@ signal covers several very different problems at once:
 | Weak or sick colony | Activity tapering off slowly over weeks |
 
 **Intruder alert.** The system knows what a bee looks like. If something moving
-shows up at the entrance that is clearly not a bee — especially if it is
-considerably larger — it raises an alert and saves a photo. This catches the
+shows up at the entrance that is clearly not a bee, especially if it is
+considerably larger, it raises an alert and saves a photo. This catches the
 Asian hornet (*Vespa velutina*), the European hornet, wasps, a mouse, a perched
 bird, or a hand touching the hive. It does not identify the species, but the
 beekeeper sees the photo and knows immediately.
@@ -160,7 +160,7 @@ There is no real hive. The demo works like this:
 
 ### Reference videos
 
-- *Bee happy* — top-down bee detection, tracking and counting. Reference for the
+- *Bee happy*: top-down bee detection, tracking and counting. Reference for the
   result we are after and for the camera framing.
   <https://www.youtube.com/watch?v=e2AaZVANBX8>
 - Entrance footage for demos and testing.
