@@ -203,6 +203,18 @@ class YoloDetector:
                 for x0, y0, x1, y1 in b]
 
 
+class NpzDetector:
+    """Replay detections saved by a previous run, so the overlay can be
+    redesigned without paying for inference again."""
+
+    def __init__(self, path):
+        d = np.load(path)
+        self.by_frame = {int(k): [tuple(map(float, b)) for b in d[k]] for k in d.files}
+
+    def __call__(self, frame, frame_idx):
+        return list(self.by_frame.get(frame_idx, []))
+
+
 # ---------------------------------------------------------------- drawing
 def text(img, s, org, scale=0.5, color=C_TEXT, thick=1, font=FONT, shadow=True):
     x, y = int(org[0]), int(org[1])
@@ -317,6 +329,9 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video")
     ap.add_argument("--weights", default="models/bee11n.pt")
+    ap.add_argument("--from-dets", default=None,
+                    help="replay a *_dets.npz instead of running the detector "
+                         "(same result, seconds instead of minutes)")
     ap.add_argument("--zone", default=None, help="entrance_zone_*.txt from the dataset")
     ap.add_argument("--line", type=float, default=None,
                     help="fallback: entrance line as a fraction of frame height")
@@ -384,7 +399,12 @@ def main():
             [[0, y0], [W, y0], [W, y1], [0, y1]], float)) * sc, np.int32)
     soft_mask = (cv2.resize(roi, (RW, RH), interpolation=cv2.INTER_NEAREST) / 255.0).astype(np.float32)
 
-    det = YoloDetector(args.weights, args.conf, args.imgsz)
+    if args.from_dets:
+        replay = NpzDetector(args.from_dets)
+        det = None
+    else:
+        replay = None
+        det = YoloDetector(args.weights, args.conf, args.imgsz)
     Track.reset()
     tracker = Tracker(W * 0.05, int(fps * 0.6), 3, entrance)
 
@@ -433,7 +453,7 @@ def main():
 
         small = cv2.resize(frame, (W, H), interpolation=cv2.INTER_AREA)
         t0 = cv2.getTickCount()
-        boxes = det(small)
+        boxes = replay(small, frame_idx) if replay else det(small)
         t_infer += (cv2.getTickCount() - t0) / cv2.getTickFrequency()
 
         boxes = [b for b in boxes
@@ -620,7 +640,8 @@ def main():
     print("\n=== summary ===")
     print(f"video   : {args.video}")
     print(f"frames  : {processed} processed, detection {W}x{H}, render {RW}x{RH}, {fps:.1f} fps")
-    print(f"detector: {args.weights}  conf={args.conf} imgsz={args.imgsz}")
+    print(f"detector: {args.from_dets or args.weights}"
+          + ("  (replay)" if args.from_dets else f"  conf={args.conf} imgsz={args.imgsz}"))
     print(f"speed   : {t_infer / max(processed, 1) * 1000:.0f} ms/frame detection only")
     print(f"IN {n_in}   OUT {n_out}   net {n_in - n_out:+d}")
     print(f"intruder alerts: {n_intruder}")
