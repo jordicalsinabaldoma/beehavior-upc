@@ -292,6 +292,22 @@ UNO Q's Qwiic connector hangs off the microcontroller's second I2C bus and
 not off the SoC, so from Linux the sensors are invisible and have to be read on
 the MCU and passed over the Bridge.
 
+This is what the beekeeper opens on their phone on arriving at the apiary. The
+interface is in Spanish, for Spanish beekeepers.
+
+| Alerts since the last visit | Monitoring | Live entrance |
+|---|---|---|
+| ![Alert list](docs/app/alerts.png) | ![Monitoring screen](docs/app/monitor.png) | ![Live entrance view](docs/app/live.png) |
+
+The alert list says what changed, never why: "the box does not tell you the
+cause, come and look". The greyed-out last entry is a sensor in the `stale`
+state, which is an alert in itself rather than a missing sensor. The monitoring
+screen puts the inside temperature against the outside one, with the healthy
+34-35 C band marked, because a brood temperature that starts tracking the
+outside air is the sign of a colony in trouble. The live view names the detector
+and where it runs, and labels itself as a recorded clip, because there is no
+camera mounted yet.
+
 It will eventually get its own repository.
 
 ## The 3D mock-up

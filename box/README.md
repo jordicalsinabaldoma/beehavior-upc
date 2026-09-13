@@ -5,6 +5,12 @@ internet and no cloud. For the non-technical design see [../DESIGN.md](../DESIGN
 
 It will end up in its own repository; for now it lives here.
 
+## What it looks like
+
+| Alerts | Monitoring | Live entrance |
+|---|---|---|
+| ![Alert list](../docs/app/alerts.png) | ![Monitoring screen](../docs/app/monitor.png) | ![Live entrance view](../docs/app/live.png) |
+
 ## Layout
 
 ```
