@@ -431,8 +431,8 @@ def main():
             p0 = (int(entrance.p0[0]), int(entrance.y_at(entrance.p0[0])))
             p1 = (int(entrance.p1[0]), int(entrance.y_at(entrance.p1[0])))
             cv2.line(vis, p0, p1, (255, 255, 255), 2)
-            put_label(vis, "HIVE", (W - 62, min(p0[1], p1[1]) - 8), 0.5)
-            put_label(vis, "BOARD", (W - 62, max(p0[1], p1[1]) + 22), 0.5)
+            put_label(vis, "HIVE", (W - 78, min(p0[1], p1[1]) - 8), 0.5)
+            put_label(vis, "BOARD", (W - 78, max(p0[1], p1[1]) + 22), 0.5)
             for tr in live:
                 x, y, w, h = [int(v) for v in tr.box]
                 col = (0, 200, 0) if tr.counted == "IN" else ((0, 140, 255) if tr.counted == "OUT" else (255, 140, 0))
@@ -453,8 +453,8 @@ def main():
                              f"bees on board: {len(live)}",
                              f"intruder alerts: {n_intruder}",
                              f"t = {t:6.1f}s"])
-            sparkline(vis, list(per_min), (10, 130, 240, 46))
-            put_label(vis, "activity", (14, 126), 0.4)
+            sparkline(vis, list(per_min), (10, 168, 240, 46))
+            put_label(vis, "bees on board / s", (12, 164), 0.4)
             writer.write(vis)
 
         if processed % int(fps * 10) == 0:

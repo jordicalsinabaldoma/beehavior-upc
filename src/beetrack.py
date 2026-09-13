@@ -167,6 +167,7 @@ def main():
     ap.add_argument("--intruder-ratio", type=float, default=4.0,
                     help="blob area / median bee area above which a blob is an intruder candidate")
     ap.add_argument("--show-mask", action="store_true", help="picture-in-picture of the foreground mask")
+    ap.add_argument("--dets-npz", default=None, help="dump per-frame detections for evaluation")
     args = ap.parse_args()
 
     cap = cv2.VideoCapture(args.video)
@@ -201,6 +202,7 @@ def main():
         writer = cv2.VideoWriter(args.out, cv2.VideoWriter_fourcc(*"mp4v"), fps, (W, H))
 
     csv_rows = []
+    dets_dump = {}
     n_in = n_out = 0
     intruder_events = 0
     area_hist = deque(maxlen=2000)
@@ -235,6 +237,9 @@ def main():
             area_hist.append(d[3])
         median_area = float(np.median(area_hist)) if area_hist else min_area * 3
 
+        if args.dets_npz is not None:
+            dets_dump[str(frame_idx)] = np.array(
+                [[d[2][0], d[2][1], d[2][2], d[2][3]] for d in dets], dtype=np.float32).reshape(-1, 4)
         confirmed, lost = tracker.step(dets)
         sec_moving.append(len(confirmed))
 
@@ -341,6 +346,9 @@ def main():
     cap.release()
     if writer:
         writer.release()
+    if args.dets_npz:
+        Path(args.dets_npz).parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(args.dets_npz, **dets_dump)
     if args.csv:
         Path(args.csv).parent.mkdir(parents=True, exist_ok=True)
         with open(args.csv, "w", newline="") as f:
