@@ -11,11 +11,12 @@ free of technical jargon, is in [DESIGN.md](DESIGN.md).
 
 ![The monitoring station in the apiary](docs/hero.jpg)
 
-This is what the system sees. Boxes and identifiers come from the detector and
-the tracker; along the top, the counters, the per-second activity and the event
-log:
+This is what the system sees. Six seconds of real output: boxes and identifiers
+come from the detector and the tracker, and along the top are the counters, the
+per-second activity and the event log. The yellow circle on the left is an entry
+being confirmed.
 
-![A frame of the annotated video with the counting overlay](docs/conteo.jpg)
+![Six seconds of the annotated video, with the counting overlay](docs/conteo.gif)
 
 Full clips are in [media/](media/): the pipeline's input
 ([`entrada_cenital_muestra.mp4`](media/entrada_cenital_muestra.mp4)) and its

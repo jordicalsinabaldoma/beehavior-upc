@@ -18,4 +18,18 @@ in `out/*_dets.npz`, without running the detector again:
 VIDEOS_DIR=/path/to/videos ./rerender.sh
 ```
 
+The GIF in the README (`../docs/conteo.gif`) comes from the same output. It is
+cropped to the instrument strip and the landing board, because the grass moving
+in the wind changes every pixel of every frame and triples the file size for no
+information:
+
+```bash
+ffmpeg -ss 90 -t 6 -i out/20230711b-fan_beehaviour.mp4 \
+  -vf "crop=1280:540:0:0,fps=12,scale=800:-1:flags=lanczos,palettegen=stats_mode=diff:max_colors=128" \
+  palette.png
+ffmpeg -ss 90 -t 6 -i out/20230711b-fan_beehaviour.mp4 -i palette.png \
+  -lavfi "crop=1280:540:0:0,fps=12,scale=800:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=3" \
+  docs/conteo.gif
+```
+
 Material derived from the Mendeley dataset, CC BY 4.0. See [../CREDITS.md](../CREDITS.md).

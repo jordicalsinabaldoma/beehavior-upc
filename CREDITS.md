@@ -28,7 +28,7 @@ derived from the dataset:
 | `dataset-sample/zones/` | The 3 entrance polygons of the test videos |
 | `media/entrada_cenital_muestra.mp4` | 15 s of `20230711b-fan.mp4`, rescaled to 1280 px |
 | `media/*_conteo.mp4` | 20 s of each test video, with the pipeline's annotations overlaid |
-| `docs/conteo.jpg`, `docs/conteo_densa.jpg` | Frames from the annotated videos |
+| `docs/conteo.gif`, `docs/conteo_densa.jpg` | A clip and a frame from the annotated videos |
 | `out/*.csv`, `out/*_dets.npz`, `out/*_actividad.png` | Measurements and detections computed over the videos |
 
 The full dataset (7.8 GB) is not redistributed: download it from the DOI above.
