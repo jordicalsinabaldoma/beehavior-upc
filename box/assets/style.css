@@ -1,0 +1,256 @@
+/* Beehaviour box - read at the hive, with gloves on, in full sun.
+   Palette lifted from the video renders (src/mock_panels3.py) so the app and
+   the counting overlay look like one product. */
+
+:root {
+  --bg:    #080808;
+  --ink:   #f5f5f3;
+  --grey:  #7a7874;
+  --faint: #3a3834;
+  --rule:  #282725;
+  --yell:  #f7c82a;
+  --red:   #e24230;
+  /* The one colour not in the render palette. The interior/exterior pair needs
+     two lines that nobody can confuse, and yellow against a cool blue is the
+     safest pair there is, colour blindness included. */
+  --cool:  #6f97a8;
+
+  --mono: "DejaVu Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body { padding-bottom: env(safe-area-inset-bottom); }
+
+.rule { height: 1px; background: var(--rule); }
+
+/* --- cabecera ------------------------------------------------------------ */
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 16px;
+}
+
+header .mark { display: block; flex-shrink: 0; }
+header .word { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; }
+header .spacer { flex-grow: 1; }
+header .hive { font-size: 11px; color: var(--grey); letter-spacing: 0.06em; }
+
+.link { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--grey); letter-spacing: 0.06em; }
+.link .dot { width: 6px; height: 6px; background: var(--faint); }
+.link.on .dot { background: var(--yell); }
+
+/* --- pestañas ------------------------------------------------------------ */
+
+nav.tabs { display: grid; grid-template-columns: 1fr 1fr; }
+
+nav.tabs button {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid var(--rule);
+  color: var(--grey);
+  height: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--yell); }
+
+.badge {
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  background: var(--red);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- avisos -------------------------------------------------------------- */
+
+.verdict { padding: 26px 16px 22px; display: flex; flex-direction: column; gap: 12px; }
+.verdict .bar { width: 38px; height: 3px; background: var(--yell); }
+.verdict.bad .bar { background: var(--red); }
+.verdict h1 { margin: 0; font-size: 30px; line-height: 1.14; letter-spacing: 0.01em; color: var(--yell); }
+.verdict.bad h1 { color: var(--red); }
+.verdict p { margin: 0; font-size: 12px; color: var(--grey); line-height: 1.6; }
+
+.events { padding: 0 16px; }
+
+.event {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 15px 0;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.event .shot { width: 68px; height: 68px; flex-shrink: 0; object-fit: cover; background: var(--rule); }
+.event .body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.event .when { font-size: 11px; color: var(--grey); letter-spacing: 0.06em; }
+.event .what { font-size: 14px; font-weight: 700; letter-spacing: 0.03em; color: var(--red); }
+.event.warn .what { color: var(--yell); }
+.event .why { font-size: 11px; color: var(--grey); line-height: 1.45; }
+.event.seen { opacity: 0.5; }
+
+.empty { padding: 8px 16px 30px; display: flex; flex-direction: column; gap: 13px; align-items: flex-start; }
+.empty .glyph { opacity: 0.5; }
+.empty p { margin: 0; font-size: 12px; color: var(--grey); line-height: 1.65; max-width: 30em; }
+
+/* --- monitoreo ----------------------------------------------------------- */
+
+.ranges { display: flex; gap: 8px; padding: 14px 16px; }
+
+.ranges button {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  height: 40px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--grey);
+  cursor: pointer;
+}
+
+.ranges button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+.card {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  color: inherit;
+  font: inherit;
+  padding: 15px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  cursor: pointer;
+}
+
+.card .head { display: flex; align-items: baseline; gap: 9px; }
+.card .name { font-size: 11px; color: var(--grey); letter-spacing: 0.08em; }
+.card .tag { font-size: 9px; color: var(--faint); letter-spacing: 0.08em; border: 1px solid var(--rule); padding: 2px 5px; }
+.card .grow { flex-grow: 1; }
+.card .now { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.card .now.warm { color: var(--yell); }
+.card .unit { font-size: 11px; color: var(--grey); }
+.card .note { font-size: 10px; color: var(--faint); letter-spacing: 0.04em; }
+.card.quiet { opacity: 0.55; }
+
+.legend { display: flex; gap: 14px; font-size: 9px; color: var(--grey); letter-spacing: 0.04em; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend i { width: 10px; height: 2px; display: block; }
+
+.chart { width: 100%; display: block; }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .band { fill: #16150f; }
+.chart .in   { fill: none; stroke: var(--yell); stroke-width: 2; stroke-linejoin: round; }
+.chart .out  { fill: none; stroke: var(--cool); stroke-width: 1.6; stroke-linejoin: round; }
+.chart .tick { font-size: 9px; fill: var(--faint); font-family: var(--mono); }
+.chart .nodata { font-size: 11px; fill: var(--faint); text-anchor: middle; font-family: var(--mono); }
+
+/* --- cámara -------------------------------------------------------------- */
+
+.camera { border-top: 1px solid var(--rule); }
+.camera .frame { position: relative; background: #000; }
+.camera video, .camera img { width: 100%; display: block; }
+
+.camera .over {
+  position: absolute;
+  left: 10px;
+  bottom: 9px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 3px var(--bg);
+}
+
+.camera .go {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  height: 52px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.camera .go .grow { flex-grow: 1; }
+.camera .go .txt { font-size: 12px; letter-spacing: 0.06em; }
+
+/* --- vistas apiladas ----------------------------------------------------- */
+
+.pushed { position: fixed; inset: 0; background: var(--bg); overflow-y: auto; z-index: 10; }
+
+.pushhead { display: flex; align-items: center; padding: 0 16px; height: 52px; gap: 4px; }
+
+.back {
+  width: 44px; height: 44px; margin-left: -12px;
+  background: transparent; border: 0; color: var(--grey); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.pushhead .title { font-size: 11px; color: var(--grey); letter-spacing: 0.06em; }
+.pushhead .grow { flex-grow: 1; }
+
+.readout { padding: 16px; display: flex; flex-direction: column; gap: 5px; }
+.readout .big { font-size: 44px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.readout .sub { font-size: 11px; color: var(--grey); letter-spacing: 0.04em; }
+
+.rows { padding: 0 16px 20px; }
+.row { display: flex; align-items: center; gap: 12px; height: 46px; border-top: 1px solid var(--rule); }
+.row .k { font-size: 12px; color: var(--grey); }
+.row .grow { flex-grow: 1; }
+.row .v { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.counters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 16px; }
+.counters .k { font-size: 9px; color: var(--faint); letter-spacing: 0.06em; }
+.counters .v { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.counters .v.warm { color: var(--yell); }
+
+footer { padding: 12px 16px 20px; font-size: 9px; color: var(--faint); letter-spacing: 0.08em; }
+
+.warning {
+  margin: 0;
+  padding: 11px 16px;
+  background: #1a0f0d;
+  border-bottom: 1px solid var(--rule);
+  color: var(--red);
+  font-size: 11px;
+  line-height: 1.5;
+}

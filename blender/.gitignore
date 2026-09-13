@@ -1,0 +1,12 @@
+# La escena se reconstruye desde los .py: el .blend es resultado, no fuente.
+# Empaquetado con HDRI y texturas pesa ~71 MB, no tiene sentido versionarlo.
+*.blend
+*.blend[0-9]
+
+# Recursos descargados de Poly Haven (CC0). Se rebajan con los scripts si hacen falta.
+assets/
+
+# Renders intermedios de prueba
+renders/t_*.png
+renders/preview_*.png
+renders/diag*.png

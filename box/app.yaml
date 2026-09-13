@@ -1,0 +1,8 @@
+name: Beehaviour box
+icon: 🐝
+description: Local hive monitor. Reads whatever Modulino sensors are plugged in, serves live readings and history over the box's own WiFi. No internet, no cloud.
+ports:
+  - 80
+bricks:
+  - arduino:dbstorage_tsstore
+  - arduino:web_ui

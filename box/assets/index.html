@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Beehaviour</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="libs/socket.io.min.js"></script>
+</head>
+<body>
+
+<header>
+    <svg class="mark" width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 1.5 21 6.75v10.5L12 22.5 3 17.25V6.75z" stroke="#f5f5f3" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M6.5 12h2.2l1.3-3.2 2 6.4 1.3-3.2h2.2" stroke="#f7c82a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="word">BEEHAVIOUR</div>
+    <div class="spacer"></div>
+    <div class="hive" id="hive">—</div>
+</header>
+
+<p class="warning" id="clock-warning" hidden>
+    El reloj de la caja no está en hora. Las marcas de tiempo no son fiables.
+</p>
+
+<nav class="tabs">
+    <button id="tab-avisos" aria-selected="true">
+        AVISOS
+        <span class="badge" id="pending" hidden>0</span>
+    </button>
+    <button id="tab-monitor" aria-selected="false">MONITOREO</button>
+</nav>
+
+<main>
+    <!-- avisos ------------------------------------------------------------ -->
+    <section id="view-avisos">
+        <div class="verdict" id="verdict">
+            <div class="bar"></div>
+            <h1 id="verdict-title">—</h1>
+            <p id="verdict-note"></p>
+        </div>
+        <div class="events" id="events"></div>
+        <div class="empty" id="events-empty" hidden>
+            <svg class="glyph" width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <path d="M3 12.5 9 18.5 21 6" stroke="#7a7874" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>La caja lleva vigilando sin interrupción y no ha registrado nada fuera de lo normal.</p>
+            <p>Aquí aparecerán, con fecha y foto, los golpes en la colmena, los intrusos en la piquera y los días de actividad rara.</p>
+        </div>
+    </section>
+
+    <!-- monitoreo --------------------------------------------------------- -->
+    <section id="view-monitor" hidden>
+        <div class="ranges" id="ranges">
+            <button data-start="-1h"  data-window="1m"  aria-pressed="true">1 H</button>
+            <button data-start="-24h" data-window="15m" aria-pressed="false">24 H</button>
+            <button data-start="-7d"  data-window="1h"  aria-pressed="false">7 DÍAS</button>
+        </div>
+        <div class="camera" id="camera">
+            <div class="frame">
+                <img id="camera-still" alt="Última imagen de la piquera">
+                <div class="over" id="camera-over">PIQUERA</div>
+            </div>
+            <button class="go" id="go-live">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="6" width="13" height="12" stroke="#f5f5f3" stroke-width="1.6"/>
+                    <path d="m16 12 5-3.5v7z" stroke="#f5f5f3" stroke-width="1.6" stroke-linejoin="round"/>
+                </svg>
+                <span class="txt">VER EN DIRECTO</span>
+                <span class="grow"></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9.5 5 16.5 12l-7 7" stroke="#7a7874" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div id="cards"></div>
+        <footer>SIN INTERNET · TODO EN LA CAJA</footer>
+    </section>
+</main>
+
+<!-- vistas apiladas -------------------------------------------------------- -->
+
+<section class="pushed" id="view-live" hidden>
+    <div class="pushhead">
+        <button class="back" data-close="view-live" aria-label="Volver">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M14.5 5 7.5 12l7 7" stroke="#7a7874" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <div class="title">PIQUERA EN DIRECTO</div>
+        <div class="grow"></div>
+        <div class="title" id="live-tag">SIMULADO</div>
+    </div>
+    <div class="rule"></div>
+    <div class="camera">
+        <div class="frame">
+            <video id="live-video" src="media/piquera.mp4" muted loop playsinline preload="metadata"></video>
+        </div>
+    </div>
+    <div class="counters">
+        <div><div class="k">EN LA TABLA</div><div class="v warm" id="live-board">—</div></div>
+        <div><div class="k">ENTRAN /MIN</div><div class="v" id="live-in">—</div></div>
+        <div><div class="k">SALEN /MIN</div><div class="v" id="live-out">—</div></div>
+    </div>
+    <div class="rule"></div>
+    <div class="rows">
+        <div class="row"><div class="k">Detector</div><div class="grow"></div><div class="v">YOLO11N</div></div>
+        <div class="row"><div class="k">Dónde corre</div><div class="grow"></div><div class="v">EN LA CAJA</div></div>
+    </div>
+    <footer id="live-foot">Clip grabado del dataset de Mendeley, con el conteo que produjo. Sustituye a la cámara hasta que haya una montada.</footer>
+</section>
+
+<section class="pushed" id="view-metric" hidden>
+    <div class="pushhead">
+        <button class="back" data-close="view-metric" aria-label="Volver">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M14.5 5 7.5 12l7 7" stroke="#7a7874" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <div class="title" id="metric-title">—</div>
+        <div class="grow"></div>
+        <div class="title" id="metric-tag"></div>
+    </div>
+    <div class="rule"></div>
+    <div class="readout">
+        <div class="big" id="metric-now">—</div>
+        <div class="sub" id="metric-sub"></div>
+    </div>
+    <div class="ranges" id="metric-ranges">
+        <button data-start="-1h"  data-window="1m"  aria-pressed="true">1 H</button>
+        <button data-start="-24h" data-window="15m" aria-pressed="false">24 H</button>
+        <button data-start="-7d"  data-window="1h"  aria-pressed="false">7 DÍAS</button>
+        <button data-start="-30d" data-window="6h"  aria-pressed="false">30 D</button>
+    </div>
+    <div id="metric-chart"></div>
+    <div class="rows" id="metric-rows"></div>
+</section>
+
+<section class="pushed" id="view-event" hidden>
+    <div class="pushhead">
+        <button class="back" data-close="view-event" aria-label="Volver">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M14.5 5 7.5 12l7 7" stroke="#7a7874" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <div class="title">AVISO</div>
+    </div>
+    <div class="rule"></div>
+    <div id="event-detail"></div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
