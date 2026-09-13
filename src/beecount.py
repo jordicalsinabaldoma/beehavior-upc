@@ -428,8 +428,8 @@ def main():
             vis = small
             if zone is not None:
                 cv2.polylines(vis, [zone.astype(np.int32)], True, (120, 120, 120), 1)
-            p0 = (int(entrance.p0[0]), int(entrance.y_at(entrance.p0[0])))
-            p1 = (int(entrance.p1[0]), int(entrance.y_at(entrance.p1[0])))
+            p0 = (0, int(entrance.y_at(0)))
+            p1 = (W, int(entrance.y_at(W)))
             cv2.line(vis, p0, p1, (255, 255, 255), 2)
             put_label(vis, "HIVE", (W - 78, min(p0[1], p1[1]) - 8), 0.5)
             put_label(vis, "BOARD", (W - 78, max(p0[1], p1[1]) + 22), 0.5)
