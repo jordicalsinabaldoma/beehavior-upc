@@ -12,7 +12,7 @@ flags anything that is not a bee, and stores it all on the device itself. When
 the beekeeper reaches the apiary, they join the box's own WiFi from their phone
 and see what has happened since the last visit.
 
-Hackathon proof of concept. The functional design, written for beekeepers and
+The functional design, written for beekeepers and
 free of technical jargon, is in [DESIGN.md](DESIGN.md).
 
 🎬 Demo video: [https://youtu.be/nuNUS15LLaE](https://youtu.be/nuNUS15LLaE)
